@@ -101,5 +101,42 @@ router.get('/search-hotels', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+// Fetch a single hotel by ID
+router.get('/hotels/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const hotel = await Hotel.findById(id).select({
+      'property.name': 1,
+      'property.photoUrls': 1,
+      'property.wishlistName': 1,
+      'property.reviewScore': 1,
+      'property.priceBreakdown.grossPrice.value': 1,
+      'property.priceBreakdown.grossPrice.currency': 1,
+      'property.description': 1,  // Add description if available
+    });
+
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found!" });
+    }
+
+    const formattedHotel = {
+      id: hotel._id,
+      name: hotel.property?.name || 'No name available',
+      images: hotel.property?.photoUrls || [],
+      city: hotel.property?.wishlistName || 'No city available',
+      rating: hotel.property?.reviewScore || 'No rating',
+      price: {
+        value: hotel.property?.priceBreakdown?.grossPrice?.value || 'N/A',
+        currency: hotel.property?.priceBreakdown?.grossPrice?.currency || 'N/A',
+      },
+      description: hotel.property?.description || 'No description available',
+    };
+
+    res.json(formattedHotel);
+  } catch (error) {
+    console.error('Error fetching hotel:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;
