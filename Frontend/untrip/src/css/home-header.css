@@ -1,0 +1,88 @@
+/* Reset and Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header Styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    width: 50px; /* Adjust as needed */
+}
+
+.logo h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Navigation Menu */
+.menu-list {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.menu-list li {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.menu-list li i {
+    font-size: 16px;
+}
+
+/* Hover Effects */
+.menu-list li:hover {
+    color: #0071c2; /* Expedia's blue */
+}
+
+/* Sign-In Button */
+.sign-in {
+    padding: 8px 15px;
+    background-color: #0071c2;
+    color: white;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.sign-in:hover {
+    background-color: #005fa3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .menu-list {
+        gap: 15px;
+        padding-top: 10px;
+    }
+}
+

@@ -1,0 +1,89 @@
+.img-bex {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Set the height of the container */
+    padding: 0 2%; /* Adds space on both sides of the image */
+    top: 350px;
+}
+
+.img-bes {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.img-bes img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Makes the image cover the entire container */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.box-text {
+    position: absolute;
+    top: 50%;
+    left: 10%; /* Align the box to the left with some space */
+    transform: translateY(-50%); /* Center the box vertically */
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+    color: white;
+    padding: 20px;
+    text-align: left;
+    border-radius: 8px;
+    width: 45%; /* Control the width of the box */
+    max-width: 400px; /* Limit the maximum width */
+}
+
+.box-text h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.box-text h5 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.box-text button {
+    background-color: #f5a623;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.box-text button:hover {
+    background-color: #f08020;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .img-bex {
+        padding: 0 5%; /* Smaller padding for mobile */
+    }
+
+    .box-text {
+        width: 80%;
+        padding: 15px;
+    }
+
+    .box-text h1 {
+        font-size: 24px;
+    }
+
+    .box-text h5 {
+        font-size: 14px;
+    }
+
+    .box-text button {
+        padding: 12px 25px;
+        font-size: 14px;
+    }
+}
