@@ -61,9 +61,7 @@
     transition: background-color 0.3s ease-in-out;
 }
 
-.box-text button:hover {
-    background-color: #f08020;
-}
+
 
 /* Responsive Styling */
 @media (max-width: 768px) {
