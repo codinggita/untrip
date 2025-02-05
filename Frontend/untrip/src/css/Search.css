@@ -12,9 +12,10 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     font-family: 'Arial', sans-serif;
     transition: all 0.3s ease-in-out;
-    position: absolute;
-    left: 101px;
-    top: 101px;
+    position: absolute;  
+    top: 35%;  
+    left: 50%;  
+    transform: translate(-50%, -50%); 
 }
 
 .search-container:hover {
@@ -52,7 +53,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    gap: 10px;
+    gap: 15px;
     padding: 15px 0;
 }
 
@@ -65,12 +66,15 @@
 /* Icons */
 .icon-location::before,
 .icon-calendar::before {
-    content: "📍";
     position: absolute;
-    left: 10px;
+    left: 12px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 18px;
+}
+
+.icon-location::before {
+    content: "📍";
 }
 
 .icon-calendar::before {
@@ -99,7 +103,7 @@
 
 /* Date Picker Popup */
 #date-picker-popup {
-    display: none;
+    display: flex;
     position: absolute;
     top: 50px;
     left: 0;
@@ -169,4 +173,3 @@
         width: 100%;
     }
 }
-
