@@ -5,7 +5,11 @@ import Sale from './components/sale';
 import Hotel from './components/HotelList';
 import Resort from './components/resort';
 import Footer from './components/Footer';  
-import HotelDetail from './components/HotelDetail';  // Import the new hotel detail page
+import Page from './components/Page';
+
+
+
+// import HotelDetail from './components/HotelDetail';  
 
 function App() {
   return (
@@ -24,7 +28,16 @@ function App() {
         } />
 
         {/* Dynamic route for hotel details */}
-        <Route path="/hotel/:id" element={<HotelDetail />} />
+        <Route path="/hotel/:id" element={
+          <>
+            <Page />
+            
+          </>
+        } />
+        
+        
+         
+
       </Routes>
       <Footer />
     </Router>

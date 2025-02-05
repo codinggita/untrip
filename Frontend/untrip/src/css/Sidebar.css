@@ -1,0 +1,147 @@
+/* Sidebar container */
+.sidebar {
+  width: 250px;
+  padding: 20px;  /* Increased padding for better spacing */
+  border-right: 1px solid #ddd;
+  height: calc(100vh - 80px);  /* Adjusted height to account for header */
+  overflow-y: auto;
+  background: #fff;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow effect */
+}
+
+/* Sidebar content */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;  /* Increased gap for better separation */
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;  /* Slightly larger gap for buttons */
+}
+
+.sidebar-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;  /* Increased gap between icon and text */
+  padding: 12px 16px;  /* Adjusted padding for better button size */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;  /* Added smooth transitions */
+}
+
+.sidebar-button:hover {
+  background: #f0f0f0;
+  transform: scale(1.02);  /* Added slight zoom effect for interaction */
+}
+
+.icon {
+  width: 18px;
+  height: 18px;  /* Slightly increased icon size for better visibility */
+}
+
+/* Search */
+.search-containerr {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+  width: 18px;
+  height: 18px;  /* Increased icon size */
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 8px 10px 40px;  /* Adjusted padding for better input size */
+  border: 1px solid #ddd;
+  border-radius: 8px;  /* Rounded borders for modern look */
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #007bff;  /* Focus state with blue border */
+  outline: none;
+}
+
+/* Sections */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;  /* Increased gap for better visual structure */
+}
+
+.section-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;  /* Darker color for better readability */
+}
+
+/* Price Slider */
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slider {
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slider:focus {
+  outline: none;
+}
+
+.price-range {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price-box {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #f9f9f9;  /* Light background for price boxes */
+}
+
+/* Filters */
+.filter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;  /* Slightly more space between filter items */
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;  /* Increased gap for better spacing */
+}
+
+.filter-checkbox {
+  width: 18px;
+  height: 18px;  /* Slightly increased checkbox size */
+}
+
+.filter-label {
+  font-size: 14px;
+  color: #555;  /* Slightly lighter text for labels */
+}
+
+.filter-item:hover .filter-label {
+  color: #007bff;  /* Color change on hover */
+  cursor: pointer;
+}
