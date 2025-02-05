@@ -1,0 +1,79 @@
+/* Container */
+.header-container {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: #fff;
+    padding: 16px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Inner wrapper */
+  .header-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Search fields */
+  .header-search-fields {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  /* Input Group */
+  .header-input-group {
+    position: relative;
+    flex: 1;
+  }
+  
+  /* Input Icon */
+  .header-input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    height: 18px;
+    width: 18px;
+  }
+  
+  /* Input Field */
+  .header-input-field {
+    width: 100%;
+    padding: 10px 10px 10px 36px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  /* Search Button */
+  .header-search-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .header-search-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Sort Dropdown */
+  .header-sort-dropdown {
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  
