@@ -1,0 +1,86 @@
+.resort-12 {
+    position: relative;
+    text-align: center;
+    padding: 50px 0;
+    max-width: 1200px;
+    margin: auto;
+    position: absolute;
+    top: 1690px;
+    left: 81px;
+}
+.text-for-resort-12{
+    display: flex;
+}
+.text-for-resort-12 h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.carousel-12 {
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.image-container-12 {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    gap: 26px;
+}
+
+.image-box-12 {
+    position: relative;
+}
+
+.image-box-12 img {
+    width: 280px;
+    height: 380px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.image-text-12 {
+    position: absolute;
+    bottom: 10px;
+    left: 19%;
+    transform: translateX(-51%);
+    /* background: rgba(0, 0, 0, 0.6); */
+    color: #000000;
+    padding: 0px 0px;
+    font-size: 21px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+
+.but {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+    left: -60px;
+}
+
+.next-btn {
+    right: -60px;
+}
