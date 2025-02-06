@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors'); 
 const hotelRoutes = require('./routes/hotel');
 
+
 const app = express();
 const PORT = 3000;
 
@@ -16,12 +17,14 @@ mongoose.connect('mongodb+srv://yasarkhancg:untrip321@cluster0.7pln3.mongodb.net
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://untrip-iuqz.onrender.com'], // Allow only requests from your frontend
+  origin: ['http://localhost:5173', 'https://untrip-iuqz.onrender.com','https://0e50-152-58-62-61.ngrok-free.app/'], // Allow only requests from your frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
 }));
+
 // Routes
 app.use('/api', hotelRoutes);
+
 
 // Start the server
 app.listen(PORT, () => {
