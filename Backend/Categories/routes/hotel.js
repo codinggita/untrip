@@ -101,6 +101,24 @@ router.get('/search-hotels', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+router.get('/hotels/raw', async (req, res) => {
+  try {
+    console.log("Fetching raw hotel data..."); 
+    
+    const hotels = await Hotel.find({}).limit(100);
+    
+    if (hotels.length === 0) {
+      console.log("No hotels found!");
+      return res.status(404).json({ message: "No hotels found!" });
+    }
+
+    console.log("Hotels fetched successfully!");
+    res.json(hotels);
+  } catch (error) {
+    console.error('🔥 Error fetching raw hotel data:', error); 
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 // Fetch a single hotel by ID
 router.get('/hotels/:id', async (req, res) => {
   try {
@@ -138,5 +156,6 @@ router.get('/hotels/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 module.exports = router;

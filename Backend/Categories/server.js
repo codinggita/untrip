@@ -15,11 +15,10 @@ mongoose.connect('mongodb+srv://yasarkhancg:untrip321@cluster0.7pln3.mongodb.net
 
 // Middleware
 app.use(express.json());
-app.use(cors({
-  origin: ['http://localhost:5173', 'https://untrip-iuqz.onrender.com'], // Allow only requests from your frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-}));
+
+// Enable CORS for all origins
+app.use(cors());
+
 // Routes
 app.use('/api', hotelRoutes);
 
