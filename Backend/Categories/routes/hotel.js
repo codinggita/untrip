@@ -15,7 +15,7 @@ router.get('/hotels', async (req, res) => {
         'property.priceBreakdown.grossPrice.value': 1,
         'property.priceBreakdown.grossPrice.currency': 1,
       })
-      .limit(100);
+      .limit(1005);
 
     if (hotels.length === 0) {
       return res.status(404).json({ message: "No hotels found!" });
@@ -77,7 +77,7 @@ router.get('/search-hotels', async (req, res) => {
         'property.priceBreakdown.grossPrice.value': 1,
         'property.priceBreakdown.grossPrice.currency': 1,
       })
-      .limit(100);
+      .limit(1005);
 
     if (hotels.length === 0) {
       return res.status(404).json({ message: "No hotels found for the selected filters!" });
