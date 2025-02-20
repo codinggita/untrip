@@ -5,7 +5,7 @@
     margin-top: 50px;
     margin-bottom: 30px; /* Space between hotel cards */
     gap: 20px;
-    top: 500px;
+    top: 561px;
   }
   
   /* Heading Section */
@@ -58,6 +58,7 @@
     right: 0;
     padding: 0 20px; /* Space on the left and right */
     z-index: 1; /* Ensure it's below the heading and above the background */
+    cursor: pointer;
   }
   
   /* Individual Hotel Card */
@@ -213,12 +214,13 @@
   
   .hotel-info .rating {
     font-size: 16px;
-    color: #000000; /* Gold color for rating */
-    width: 44px;
+    color: #000000;
+    width: 62px;
     border: 1px solid black;
     border-radius: 5px;
     text-align: center;
     background-color: #0a5706;
+    height: 27px;
   }
   
   .hotel-info h2 {
@@ -237,4 +239,26 @@
     font-size: 14px;
     color: #666;
   }
-  
+  /* Centered Loader Animation */
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #003580;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 50px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+}

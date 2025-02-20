@@ -2,33 +2,59 @@ import React, { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // Import the CSS for the date picker
 import "../css/Search.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 
 const SearchBox = () => {
+  const [activeTab, setActiveTab] = useState("Stays"); // Active tab track karega
   const [dates, setDates] = useState({ checkin: null, checkout: null });
   const [isDatePickerOpen, setDatePickerOpen] = useState(false);
+  const [city, setCity] = useState(""); // State for city input
   const dateInputRef = useRef(null);
   const datePopupRef = useRef(null);
+  const navigate = useNavigate(); // Hook for navigation
 
-  // Handle opening the date picker when clicking the input
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
   const handleDateInputClick = () => {
-    console.log("Date input clicked");
     setDatePickerOpen((prevState) => !prevState); // Toggle the state
   };
 
-  // Handle date selection for check-in
   const handleCheckinChange = (date) => {
-    console.log("Check-in date selected:", date);
     setDates({ ...dates, checkin: date });
   };
 
-  // Handle date selection for checkout
   const handleCheckoutChange = (date) => {
-    console.log("Checkout date selected:", date);
     setDates({ ...dates, checkout: date });
     setDatePickerOpen(false); // Close the popup after selecting both dates
   };
 
-  // Close date picker when clicked outside
+  const handleCityChange = (event) => {
+    setCity(event.target.value);
+  };
+
+  const handleSearch = async () => {
+    if (!city) {
+      alert("Please enter a city.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://untrip-1.onrender.com/api/search-hotels?city=${city}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch hotels");
+      }
+      const data = await response.json();
+      navigate("/hotels", { state: { city, hotels: data } }); // Navigate to hotels page with data
+    } catch (error) {
+      console.error("Error fetching hotels:", error);
+      alert("Failed to fetch hotels. Please try again.");
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -36,7 +62,6 @@ const SearchBox = () => {
         !datePopupRef.current.contains(event.target) &&
         !dateInputRef.current.contains(event.target)
       ) {
-        console.log("Clicked outside, closing date picker");
         setDatePickerOpen(false);
       }
     };
@@ -52,79 +77,129 @@ const SearchBox = () => {
       {/* Tabs */}
       <div className="search-tabs">
         {["Stays", "Flights", "Cars", "Packages", "Cruises"].map((tab, index) => (
-          <h3 key={index} className={index === 0 ? "active" : ""}>
+          <h3
+            key={index}
+            className={activeTab === tab ? "active" : ""}
+            onClick={() => handleTabClick(tab)}
+          >
             {tab}
           </h3>
         ))}
       </div>
 
-      {/* Search Inputs */}
+      {/* Search Inputs Based on Active Tab */}
       <div className="search-box">
-        <div className="input-wrapper">
-          <input type="text" placeholder="Where to?" className="search-input" />
-          <i className="icon-location"></i>
-        </div>
-
-        <div className="input-wrapper" id="date-picker-wrapper">
-          <input
-            type="text"
-            id="date-input"
-            placeholder="Check-in → Check-out"
-            readOnly
-            value={
-              dates.checkin && dates.checkout
-                ? `${dates.checkin.toLocaleDateString()} → ${dates.checkout.toLocaleDateString()}`
-                : "Check-in → Check-out"
-            }
-            onClick={handleDateInputClick}
-            ref={dateInputRef}
-          />
-          <i className="icon-calendar"></i>
-
-          {/* Date Picker Popup */}
-          {isDatePickerOpen && (
-            <div
-              id="date-picker-popup"
-              ref={datePopupRef}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                border: "1px solid #ccc",
-                padding: "10px",
-                backgroundColor: "white",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-                position: "absolute",
-                zIndex: 10,
-              }}
-            >
-              {/* Check-in Date Picker */}
-              <DatePicker
-                selected={dates.checkin}
-                onChange={handleCheckinChange}
-                placeholderText="Select check-in date"
-                selectsStart
-                startDate={dates.checkin}
-                endDate={dates.checkout}
-                dateFormat="yyyy/MM/dd"
+        {activeTab === "Stays" && (
+          <>
+            <div className="input-wrapper">
+              <input
+                type="text"
+                placeholder="Where to?"
+                value={city}
+                onChange={handleCityChange}
+                className="search-input"
               />
-
-              {/* Checkout Date Picker */}
-              <DatePicker
-                selected={dates.checkout}
-                onChange={handleCheckoutChange}
-                placeholderText="Select checkout date"
-                selectsEnd
-                startDate={dates.checkin}
-                endDate={dates.checkout}
-                minDate={dates.checkin}
-                dateFormat="yyyy/MM/dd"
-              />
+              <i className="icon-location"></i>
             </div>
-          )}
-        </div>
 
-        <button className="search-button">Search</button>
+            <div className="input-wrapper" id="date-picker-wrapper">
+              <input
+                type="text"
+                id="date-input"
+                placeholder="Check-in → Check-out"
+                readOnly
+                value={
+                  dates.checkin && dates.checkout
+                    ? `${dates.checkin.toLocaleDateString()} → ${dates.checkout.toLocaleDateString()}`
+                    : "Check-in → Check-out"
+                }
+                onClick={handleDateInputClick}
+                ref={dateInputRef}
+              />
+              <i className="icon-calendar"></i>
+
+              {/* Date Picker Popup */}
+              {isDatePickerOpen && (
+                <div id="date-picker-popup" ref={datePopupRef}>
+                  <DatePicker
+                    selected={dates.checkin}
+                    onChange={handleCheckinChange}
+                    placeholderText="Select check-in date"
+                    selectsStart
+                    startDate={dates.checkin}
+                    endDate={dates.checkout}
+                    dateFormat="yyyy/MM/dd"
+                  />
+
+                  <DatePicker
+                    selected={dates.checkout}
+                    onChange={handleCheckoutChange}
+                    placeholderText="Select checkout date"
+                    selectsEnd
+                    startDate={dates.checkin}
+                    endDate={dates.checkout}
+                    minDate={dates.checkin}
+                    dateFormat="yyyy/MM/dd"
+                  />
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
+        {activeTab === "Flights" && (
+          <>
+            <div className="input-wrapper">
+              <input type="text" placeholder="From" className="search-input" />
+            </div>
+            <div className="input-wrapper">
+              <input type="text" placeholder="To" className="search-input" />
+            </div>
+            <div className="input-wrapper">
+              <DatePicker placeholderText="Departure Date" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "Cars" && (
+          <>
+            <div className="input-wrapper">
+              <input type="text" placeholder="Pick-up Location" className="search-input" />
+            </div>
+            <div className="input-wrapper">
+              <input type="text" placeholder="Drop-off Location" className="search-input" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "Packages" && (
+          <>
+            <div className="input-wrapper">
+              <input type="text" placeholder="Destination" className="search-input" />
+            </div>
+            <div className="input-wrapper">
+              <DatePicker placeholderText="Start Date" />
+            </div>
+            <div className="input-wrapper">
+              <DatePicker placeholderText="End Date" />
+            </div>
+          </>
+        )}
+
+        {activeTab === "Cruises" && (
+          <>
+            <div className="input-wrapper">
+              <input type="text" placeholder="Cruise Destination" className="search-input" />
+            </div>
+            <div className="input-wrapper">
+              <DatePicker placeholderText="Departure Date" />
+            </div>
+          </>
+        )}
+
+        <button className="search-button" onClick={handleSearch}>
+          Search
+        </button>
       </div>
 
       {/* Search Options */}

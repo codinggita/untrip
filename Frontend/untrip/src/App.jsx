@@ -1,46 +1,50 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/home-header';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Header from './components/home-header';
 import Search from './components/Search';  
 import Sale from './components/sale';  
 import Hotel from './components/HotelList';
+import Destination from './components/Destination';
 import Resort from './components/resort';
 import Footer from './components/Footer';  
 import Page from './components/Page';
-
-
-
-// import HotelDetail from './components/HotelDetail';  
+import HotelListing from './components/HotelListing';
+import SignIn from './components/Signin';
+import PageFor from './components/PageSearch';
 
 function App() {
   return (
     <Router>
-      <Home />
+      <MainContent />
+    </Router>
+  );
+}
+
+function MainContent() {
+  const location = useLocation();
+  const isSignInPage = location.pathname === "/signin"; 
+  return (
+    <>
+      {!isSignInPage && <Header />}
       <Routes>
-        {/* Home page with multiple components */}
+        <Route path="/signin" element={<SignIn />} />
         <Route path="/" element={
           <>
             <Search /> 
             <Sale />
             <Hotel />
             <Resort />
-
+            <Destination />
           </>
         } />
-
-        {/* Dynamic route for hotel details */}
-        <Route path="/hotel/:id" element={
-          <>
-            <Page />
-            
-          </>
-        } />
-        
-        
-         
-
+        <Route path="/hotels" element={
+        <>
+        <PageFor />
+        </>} />
+        <Route path="/hotel/:id" element={<Page />} />
+        <Route path="/HotelDetails/:id" element={<HotelListing />} />
       </Routes>
-      <Footer />
-    </Router>
+      {!isSignInPage && <Footer />}
+    </>
   );
 }
 

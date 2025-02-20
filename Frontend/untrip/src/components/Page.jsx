@@ -5,7 +5,7 @@ import HotelCard from "./HotelCard";
 import '../css/Page.css'
 
 
-const HOTELS = Array(9).fill({
+const HOTELS = Array(1).fill({
   name: "FabHotel Liwa International",
   location: "Andheri East",
   rating: 8.0,

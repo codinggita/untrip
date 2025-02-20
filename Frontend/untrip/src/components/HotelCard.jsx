@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";  
 import { Heart } from "lucide-react";
 import "../css/Hotel-Card.css"; 
 
@@ -11,28 +11,45 @@ const HotelDetail = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-      const fetchHotels = async () => {
-          try {
-              const response = await fetch(`https://untrip-1.onrender.com/api/hotels`);
-              if (!response.ok) {
-                  throw new Error("Failed to fetch hotel details");
-              }
-              const data = await response.json();
+        const fetchHotelDetails = async () => {
+            try {
+                // Fetch ALL hotels (for finding selected hotel)
+                const response = await fetch(`https://untrip-1.onrender.com/api/hotels`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch hotel details");
+                }
+                const data = await response.json();
+                console.log("Fetched Hotels:", data); // ✅ Debugging 
 
-              const hotelWithId = data.find(hotel => hotel.id === id);
-              const otherHotels = data.filter(hotel => hotel.id !== id).slice(0, 4);
-              setSelectedHotel(hotelWithId);
-              setHotels(otherHotels);
-          } catch (err) {
-              setError(err.message);
-          } finally {
-              setLoading(false);
-          }
-      };
+                // Find the selected hotel by ID
+                const hotelWithId = data.find(hotel => hotel.id == id);
+                if (!hotelWithId) {
+                    throw new Error(`No hotel found with ID: ${id}`);
+                }
+                setSelectedHotel(hotelWithId);
 
-      fetchHotels();
-  }, [id]);  
+                // ✅ Now fetch hotels for the correct city using city-based API
+                const cityResponse = await fetch(
+                    `https://untrip-1.onrender.com/api/search-hotels?destination=${hotelWithId.city}`
+                );
+                if (!cityResponse.ok) {
+                    throw new Error("Failed to fetch hotels for this city");
+                }
+                const cityHotels = await cityResponse.json();
 
+                // Remove the selected hotel from the list
+                const filteredHotels = cityHotels.filter(hotel => hotel.id != id).slice(0, 4);
+                setHotels(filteredHotels);
+
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchHotelDetails();
+    }, [id]);  
 
     if (loading) return <h2>Loading hotel details...</h2>;
     if (error) return <h2 style={{ color: "red" }}>{error}</h2>;
@@ -41,8 +58,9 @@ const HotelDetail = () => {
         <div className="hotel-card-container-wrapper">
             {selectedHotel && (
                 <HotelCard
+                    id={selectedHotel.id}   
                     name={selectedHotel.name}
-                    location={selectedHotel.city}
+                    location={selectedHotel.city} // ✅ City will be displayed here
                     rating={selectedHotel.rating}
                     ratingText="Excellent"
                     reviews={selectedHotel.reviews || 0}
@@ -52,11 +70,16 @@ const HotelDetail = () => {
                 />
             )}
 
+            <h3 style={{ margin: "20px 0", fontSize: "1.5rem" }}>
+                More Hotels in {selectedHotel?.city}
+            </h3>
+
             {hotels.map((hotel) => (
                 <HotelCard
                     key={hotel.id}
+                    id={hotel.id}  
                     name={hotel.name}
-                    location={hotel.city}
+                    location={hotel.city} // ✅ Ensure city is displayed
                     rating={hotel.rating}
                     ratingText="Very Good"
                     reviews={hotel.reviews || 0}
@@ -70,6 +93,7 @@ const HotelDetail = () => {
 };
 
 const HotelCard = ({
+  id,
   name,
   location,
   rating,
@@ -79,6 +103,8 @@ const HotelCard = ({
   totalPrice,
   imageUrl,
 }) => {
+  const navigate = useNavigate();  
+
   return (
       <div className="hotel-card-container">
           <div className="hotel-card-image-wrapper">
@@ -117,7 +143,12 @@ const HotelCard = ({
                   <p className="hotel-card-tax-info">Includes taxes & fees</p>
 
                   <button className="hotel-card-signin-btn">Sign in for extra savings</button>
-                  <button className="hotel-card-select-room-btn">Select your room</button>
+                  <button 
+                      className="hotel-card-select-room-btn" 
+                      onClick={() => navigate(`/HotelDetails/${id}`)} 
+                  >
+                      Select your room
+                  </button>
               </div>
           </div>
       </div>
