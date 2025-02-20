@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import navigation hook
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/hotel.css';
 import ROW from '../img/ROW.png';
@@ -13,11 +13,20 @@ const Hotel = () => {
     const fetchHotelData = async () => {
       try {
         const response = await axios.get('https://untrip-1.onrender.com/api/hotels');
-        setHotelData(response.data);
-        setLoading(false);
+
+        // Shuffle function to ensure different hotels on refresh
+        const shuffleArray = (array) => {
+          return array.sort(() => Math.random() - 0.5);
+        };
+
+        // Storing original data & shuffling before displaying
+        const shuffledHotels = shuffleArray([...response.data]);
+        setHotelData(shuffledHotels);
+
       } catch (error) {
         setError(error.message || 'Something went wrong!');
         console.error("Error fetching data: ", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -25,8 +34,8 @@ const Hotel = () => {
     fetchHotelData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div className="loader"></div>;
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="hotel">
@@ -49,22 +58,24 @@ const Hotel = () => {
 };
 
 const HotelCard = ({ hotelInfo }) => {
-  const navigate = useNavigate(); // React Router navigation
+  const navigate = useNavigate();
 
   return (
-    <div className="container-hotel">
-      <div
-        className="container-hotel-main"
-        onClick={() => navigate(`/hotel/${hotelInfo.id}`)} // Navigate to detail page
-        style={{ cursor: "pointer" }} // Make it look clickable
-      >
+    <div className="container-hotel" onClick={() => navigate(`/hotel/${hotelInfo.id}`)}>
+      <div className="container-hotel-main">
         <img src={hotelInfo.images[0]} alt="Hotel" className="hotel-image" />
         <div className="hotel-info">
           <h1>{hotelInfo.name}</h1>
-          <p className="rating">{hotelInfo.rating}</p>
+          <p className="rating">⭐ {hotelInfo.rating}</p>
           <h2>Very Good</h2>
-          <p className="price">{hotelInfo.price.value} {hotelInfo.price.currency}</p>
-          <p>Per Night <br /> {hotelInfo.price.value * 3} {hotelInfo.price.currency} Total <br /> Includes Taxes & Fees</p>
+          <p className="price">
+            {hotelInfo.price.currency} {hotelInfo.price.value.toFixed(2)}
+          </p>
+          <p>
+            Per Night <br />
+            {hotelInfo.price.currency} {(hotelInfo.price.value * 3).toFixed(2)} Total <br />
+            Includes Taxes & Fees
+          </p>
         </div>
       </div>
     </div>
