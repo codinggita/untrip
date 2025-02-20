@@ -105,7 +105,7 @@ router.get('/hotels/raw', async (req, res) => {
   try {
     console.log("Fetching raw hotel data..."); 
     
-    const hotels = await Hotel.find({}).limit(100);
+    const hotels = await Hotel.find({}).limit(1005);
     
     if (hotels.length === 0) {
       console.log("No hotels found!");
