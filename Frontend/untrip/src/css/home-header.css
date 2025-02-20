@@ -14,6 +14,7 @@
     padding: 15px 5%;
     background-color: white;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    height: 80px;
 }
 
 /* Logo */
@@ -24,9 +25,15 @@
 }
 
 .logo img {
-    width: 50px; /* Adjust as needed */
+    width: 150px; /* Adjust as needed */
 }
-
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+  }
+  
 .logo h1 {
     font-size: 20px;
     font-weight: 600;
@@ -86,3 +93,59 @@
     }
 }
 
+/* Style for profile image */
+.profile-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 10px;
+}
+
+/* Profile Box Styles */
+.profile-box {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-box p {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.profile-box button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.profile-box button:hover {
+  background-color: #d32f2f;
+}
+
+/* Ensure profile box is only visible when toggled */
+.user-profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.user-profile:hover .profile-box {
+  display: block;
+}
