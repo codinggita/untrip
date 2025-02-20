@@ -1,0 +1,239 @@
+.explorer-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    position: relative;
+    top: 1020px;
+  }
+  
+  .explorer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.25rem;
+  }
+  
+  .explorer-subtitle {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+  
+  .categories-container {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 2rem;
+  }
+  
+  .category-tab {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #666;
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+  }
+  
+  .category-tab:hover {
+    color: #1a1a1a;
+  }
+  
+  .category-tab.active {
+    color: #2563eb;
+  }
+  
+  .category-tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #2563eb;
+  }
+  
+  .slider-container {
+    position: relative;
+    padding: 0 2rem;
+  }
+  
+  .slider-wrapper {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0.5rem 0;
+  }
+  
+  .slider-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .destination-card {
+    flex: 0 0 300px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .destination-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .image-container {
+    position: relative;
+    aspect-ratio: 4 / 3;
+  }
+  
+  .destination-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .info-button {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .info-button:hover {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  
+  .card-content {
+    padding: 1rem;
+    background: white;
+  }
+  
+  .destination-name {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.25rem;
+  }
+  
+  .destination-region {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+  
+  .destination-price {
+    font-size: 0.875rem;
+  }
+  
+  .price-amount {
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  
+  .price-text {
+    color: #666;
+    margin-left: 0.25rem;
+  }
+  
+  .slider-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #e5e5e5;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    z-index: 10;
+  }
+  
+  .slider-button:hover {
+    background: #f5f5f5;
+    color: #1a1a1a;
+  }
+  
+  .slider-button.left {
+    left: 0;
+  }
+  
+  .slider-button.right {
+    right: 0;
+  }
+  
+  .help-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #e5e5e5;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+  }
+  
+  .help-button:hover {
+    background: #f5f5f5;
+    color: #1a1a1a;
+  }
+  
+  @media (max-width: 768px) {
+    .categories-container {
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+  
+    .slider-container {
+      padding: 0 1rem;
+    }
+  
+    .destination-card {
+      flex: 0 0 280px;
+    }
+  }
+  
+  .loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #ccc;
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
