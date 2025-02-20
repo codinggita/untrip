@@ -105,7 +105,7 @@
 #date-picker-popup {
     display: flex;
     position: absolute;
-    top: 50px;
+    top: -70px;
     left: 0;
     background: white;
     padding: 10px;
@@ -113,7 +113,7 @@
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     z-index: 100;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
 }
 
@@ -173,3 +173,29 @@
         width: 100%;
     }
 }
+.search-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .search-tabs h3 {
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .search-tabs h3.active {
+    border-bottom: 2px solid blue;
+    color: blue;
+  }
+  
+  #date-picker-popup {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+  }
+  
