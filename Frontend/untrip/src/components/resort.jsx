@@ -62,7 +62,12 @@ const ResortCarousel = () => {
   };
 
   if (loading) {
-    return <h2>Loading hotels...</h2>;
+    return (
+      <div className="loader-container">
+        <div className="spinner"></div>
+        <h2>Loading hotels...</h2>
+      </div>
+    );
   }
 
   if (error) {
