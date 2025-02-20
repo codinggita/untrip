@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors'); 
 const hotelRoutes = require('./routes/hotel');
+const carRoutes = require('./routes/car');
 
 const app = express();
 const PORT = 3000;
@@ -21,6 +22,7 @@ app.use(cors());
 
 // Routes
 app.use('/api', hotelRoutes);
+app.use('/car', carRoutes);
 
 // Start the server
 app.listen(PORT, () => {
