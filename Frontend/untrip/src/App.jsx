@@ -6,10 +6,10 @@ import Hotel from './components/HotelList';
 import Destination from './components/Destination';
 import Resort from './components/resort';
 import Footer from './components/Footer';  
-import Page from './components/Page';
-import HotelListing from './components/HotelListing';
+import Page from './Pages/Page';
+import HotelListing from './Pages/HotelListing';
 import SignIn from './Userauth/Signin';
-import PageFor from './components/PageSearch';
+import PageFor from './Pages/PageSearch';
 
 function App() {
   return (
