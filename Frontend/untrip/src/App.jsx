@@ -8,7 +8,7 @@ import Resort from './components/resort';
 import Footer from './components/Footer';  
 import Page from './components/Page';
 import HotelListing from './components/HotelListing';
-import SignIn from './components/Signin';
+import SignIn from './Userauth/Signin';
 import PageFor from './components/PageSearch';
 
 function App() {
