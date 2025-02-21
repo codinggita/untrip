@@ -10,80 +10,74 @@
     border-radius: 24px;
     padding: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
+    font-family: "Arial", sans-serif;
     transition: all 0.3s ease-in-out;
-    position: absolute;  
-    top: 35%;  
-    left: 50%;  
-    transform: translate(-50%, -50%); 
-}
-
-.search-container:hover {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .search-container:hover {
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Tabs */
-.search-tabs {
+  }
+  
+  /* Tabs */
+  .search-tabs {
     display: flex;
     justify-content: center;
     gap: 25px;
     width: 100%;
     padding: 15px 0;
     border-bottom: 2px solid #e0e0e0;
-}
-
-.search-tabs h3 {
+  }
+  
+  .search-tabs h3 {
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
     padding: 10px 15px;
     color: #333;
     transition: all 0.3s;
-}
-
-.search-tabs h3:hover,
-.search-tabs h3.active {
+  }
+  
+  .search-tabs h3:hover,
+  .search-tabs h3.active {
     color: #007bff;
     border-bottom: 3px solid #007bff;
-}
-
-/* Search Box */
-.search-box {
+  }
+  
+  /* Search Box */
+  .search-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     gap: 15px;
     padding: 15px 0;
-}
-
-/* Input Wrappers */
-.input-wrapper {
+  }
+  
+  /* Input Wrappers */
+  .input-wrapper {
     position: relative;
     width: 30%;
-}
-
-/* Icons */
-.icon-location::before,
-.icon-calendar::before {
+  }
+  
+  /* Icons */
+  .icon {
     position: absolute;
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 18px;
-}
-
-.icon-location::before {
-    content: "📍";
-}
-
-.icon-calendar::before {
-    content: "📅";
-}
-
-/* Inputs */
-.search-input, 
-#date-input {
+    width: 18px;
+    height: 18px;
+    color: #6b7280;
+  }
+  
+  /* Inputs */
+  .search-input,
+  #date-input,
+  .car-input {
     width: 100%;
     padding: 12px 12px 12px 40px;
     border: 1px solid #ccc;
@@ -92,20 +86,21 @@
     transition: all 0.3s;
     cursor: pointer;
     background-color: white;
-}
-
-.search-input:focus, 
-#date-input:focus {
+  }
+  
+  .search-input:focus,
+  #date-input:focus,
+  .car-input:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     outline: none;
-}
-
-/* Date Picker Popup */
-#date-picker-popup {
+  }
+  
+  /* Date Picker Popup */
+  #date-picker-popup {
     display: flex;
     position: absolute;
-    top: -70px;
+    top: -120%;
     left: 0;
     background: white;
     padding: 10px;
@@ -115,16 +110,20 @@
     z-index: 100;
     flex-direction: row;
     gap: 10px;
-}
-
-#date-picker-popup input {
-    width: 84%;
+  }
+  
+  #date-picker-popup .react-datepicker-wrapper {
+    width: 50%;
+  }
+  
+  #date-picker-popup input {
+    width: 100%;
     padding: 8px;
     font-size: 14px;
-}
-
-/* Search Button */
-.search-button {
+  }
+  
+  /* Search Button */
+  .search-button {
     background: #007bff;
     color: white;
     font-size: 16px;
@@ -134,68 +133,123 @@
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s;
-}
-
-.search-button:hover {
+  }
+  
+  .search-button:hover {
     background: #0056b3;
     transform: scale(1.05);
-}
-
-/* Search Options */
-.search-options {
+  }
+  
+  /* Search Options */
+  .search-options {
     display: flex;
     gap: 20px;
     padding: 15px 0;
-}
-
-.search-options label {
+  }
+  
+  .search-options label {
     font-size: 16px;
     cursor: pointer;
-}
-
-.search-options input {
+  }
+  
+  .search-options input {
     margin-right: 5px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .search-box {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .search-input, 
-    #date-input {
-        width: 100%;
-    }
-
-    .input-wrapper {
-        width: 100%;
-    }
-}
-.search-tabs {
+  }
+  
+  /* Car Section Styles */
+  .car-section {
+    width: 100%;
+  }
+  
+  .car-nav {
     display: flex;
-    gap: 15px;
-    margin-bottom: 10px;
+    gap: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
   }
   
-  .search-tabs h3 {
-    cursor: pointer;
-    padding: 10px;
-    transition: all 0.3s ease-in-out;
+  .car-nav a {
+    text-decoration: none;
+    color: #4b5563;
+    padding: 8px 0;
   }
   
-  .search-tabs h3.active {
-    border-bottom: 2px solid blue;
-    color: blue;
+  .car-nav a.active {
+    color: #2563eb;
+    border-bottom: 2px solid #2563eb;
   }
   
-  #date-picker-popup {
+  .car-search-form {
+    width: 100%;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    width: 100%;
+  }
+  
+  .input-label {
     position: absolute;
+    top: -8px;
+    left: 36px;
     background: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 10;
+    padding: 0 4px;
+    font-size: 12px;
+    color: #6b7280;
   }
+  
+  .car-options {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .option-btn {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .option-btn:hover {
+    text-decoration: underline;
+  }
+  
+  .chevron {
+    font-size: 10px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .search-box {
+      flex-direction: column;
+      gap: 15px;
+    }
+  
+    .search-input,
+    #date-input,
+    .car-input {
+      width: 100%;
+    }
+  
+    .input-wrapper {
+      width: 100%;
+    }
+  
+    .form-row {
+      flex-direction: column;
+    }
+  
+    .car-options {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
   
