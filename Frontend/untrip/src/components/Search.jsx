@@ -7,9 +7,16 @@ import { useNavigate } from "react-router-dom"
 
 const SearchBox = () => {
   const [activeTab, setActiveTab] = useState("Stays")
-  const [dates, setDates] = useState({ checkin: null, checkout: null })
+  const [dates, setDates] = useState({ 
+    checkin: null, 
+    checkout: null,
+    pickup: null,
+    dropoff: null
+  })
   const [isDatePickerOpen, setDatePickerOpen] = useState(false)
   const [city, setCity] = useState("")
+  const [pickupLocation, setPickupLocation] = useState("")
+  const [dropoffLocation, setDropoffLocation] = useState("")
   const dateInputRef = useRef(null)
   const datePopupRef = useRef(null)
   const navigate = useNavigate()
@@ -35,22 +42,72 @@ const SearchBox = () => {
     setCity(event.target.value)
   }
 
-  const handleSearch = async () => {
-    if (!city) {
-      alert("Please enter a city.")
-      return
-    }
+  const handlePickupLocationChange = (event) => {
+    setPickupLocation(event.target.value)
+  }
 
-    try {
-      const response = await fetch(`https://untrip-1.onrender.com/api/search-hotels?city=${city}`)
-      if (!response.ok) {
-        throw new Error("Failed to fetch hotels")
+  const handleDropoffLocationChange = (event) => {
+    setDropoffLocation(event.target.value)
+  }
+
+  const handleSearch = async () => {
+    if (activeTab === "Stays") {
+      if (!city) {
+        alert("Please enter a city.")
+        return
       }
-      const data = await response.json()
-      navigate("/hotels", { state: { city, hotels: data } })
-    } catch (error) {
-      console.error("Error fetching hotels:", error)
-      alert("Failed to fetch hotels. Please try again.")
+
+      try {
+        const response = await fetch(`https://untrip-1.onrender.com/api/search-hotels?city=${city}`)
+        if (!response.ok) {
+          throw new Error("Failed to fetch hotels")
+        }
+        const data = await response.json()
+        navigate("/hotels", { state: { city, hotels: data } })
+      } catch (error) {
+        console.error("Error fetching hotels:", error)
+        alert("Failed to fetch hotels. Please try again.")
+      }
+    } else if (activeTab === "Cars") {
+      if (!pickupLocation) {
+        alert("Please enter a pick-up location.")
+        return
+      }
+      
+      if (!dates.pickup) {
+        alert("Please select a pick-up date.")
+        return
+      }
+
+      try {
+        // Format dates for the API request
+        const pickupDate = dates.pickup ? dates.pickup.toISOString().split('T')[0] : '';
+        const dropoffDate = dates.dropoff ? dates.dropoff.toISOString().split('T')[0] : '';
+        
+        // Build the query parameters
+        const params = new URLSearchParams({
+          pickup_location: pickupLocation,
+          dropoff_location: dropoffLocation || pickupLocation,
+          pickup_date: pickupDate,
+          dropoff_date: dropoffDate || pickupDate
+        });
+
+        const response = await fetch(`https://untrip-1.onrender.com/car/api/search-car?${params.toString()}`)
+        if (!response.ok) {
+          throw new Error("Failed to fetch cars")
+        }
+        const data = await response.json()
+        navigate("/cars", { state: { 
+          pickupLocation, 
+          dropoffLocation: dropoffLocation || pickupLocation, 
+          pickupDate, 
+          dropoffDate: dropoffDate || pickupDate,
+          cars: data
+        }})
+      } catch (error) {
+        console.error("Error fetching cars:", error)
+        alert("Failed to fetch cars. Please try again.")
+      }
     }
   }
 
@@ -153,32 +210,60 @@ const SearchBox = () => {
           <div className="form-row">
             <div className="input-wrapper">
               <MapPin className="icon" />
-              <input type="text" placeholder="Pick-up" className="car-input" />
+              <input 
+                type="text" 
+                placeholder="Pick-up" 
+                className="car-input" 
+                value={pickupLocation}
+                onChange={handlePickupLocationChange}
+              />
             </div>
 
             <div className="input-wrapper">
               <MapPin className="icon" />
-              <input type="text" placeholder="Same as pick-up" className="car-input" />
+              <input 
+                type="text" 
+                placeholder="Same as pick-up" 
+                className="car-input" 
+                value={dropoffLocation}
+                onChange={handleDropoffLocationChange}
+              />
               <span className="input-label">Drop-off</span>
             </div>
 
             <div className="input-wrapper">
               <Calendar className="icon" />
               <DatePicker
-              selected={dates.dropoff}
-              onChange={(date) => setDates({ ...dates, dropoff: date })}
-              placeholderText="Date"
-              className="car-input"
-              dateFormat="MMM d, yyyy"
-              minDate={dates.pickup} 
-            />
-              <span className="input-label">Dates</span>
+                selected={dates.pickup}
+                onChange={(date) => setDates({ ...dates, pickup: date })}
+                placeholderText="Pick-up date"
+                className="car-input"
+                dateFormat="MMM d, yyyy"
+              />
+              <span className="input-label">Pick-up date</span>
+            </div>
+
+            <div className="input-wrapper">
+              <Calendar className="icon" />
+              <DatePicker
+                selected={dates.dropoff}
+                onChange={(date) => setDates({ ...dates, dropoff: date })}
+                placeholderText="Drop-off date"
+                className="car-input"
+                dateFormat="MMM d, yyyy"
+                minDate={dates.pickup} 
+              />
+              <span className="input-label">Drop-off date</span>
             </div>
 
             <div className="input-wrapper">
               <Clock className="icon" />
               <select className="car-input">
                 <option>10:30am</option>
+                <option>11:00am</option>
+                <option>11:30am</option>
+                <option>12:00pm</option>
+                <option>12:30pm</option>
               </select>
               <span className="input-label">Pick-up time</span>
             </div>
@@ -187,6 +272,10 @@ const SearchBox = () => {
               <Clock className="icon" />
               <select className="car-input">
                 <option>10:30am</option>
+                <option>11:00am</option>
+                <option>11:30am</option>
+                <option>12:00pm</option>
+                <option>12:30pm</option>
               </select>
               <span className="input-label">Drop-off time</span>
             </div>
@@ -289,4 +378,3 @@ const SearchBox = () => {
 }
 
 export default SearchBox
-
