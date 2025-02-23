@@ -19,29 +19,43 @@
 }
 
 .carousel-12 {
-    overflow: hidden;
-    width: 100%;
     display: flex;
-    justify-content: center;
+    overflow-x: auto; 
+    scroll-snap-type: x mandatory; 
+    justify-content: flex-start; /* ✅ Fix */
     position: relative;
+    scrollbar-width: none; 
+    white-space: nowrap;
 }
+
+
+
 
 .image-container-12 {
     display: flex;
+    flex-wrap: nowrap;
     transition: transform 0.5s ease-in-out;
     gap: 26px;
+    min-width: 100%; 
 }
+
+
+
 
 .image-box-12 {
     position: relative;
+    flex-shrink: 0; 
 }
 
+
 .image-box-12 img {
-    width: 280px;
+    width: 280px; 
     height: 380px;
     border-radius: 15px;
+    object-fit: cover; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
 
 .image-text-12 {
     position: absolute;

@@ -18,7 +18,7 @@ const ResortCarousel = () => {
       try {
         const response = await fetch("https://untrip-1.onrender.com/api/hotels");
         const data = await response.json();
-        setHotels(data); // Assuming API returns an array of hotels
+        setHotels(data.slice(0, 100));
         setLoading(false);
       } catch (error) {
         console.error("Error fetching hotels:", error);
@@ -29,6 +29,7 @@ const ResortCarousel = () => {
 
     fetchHotels();
   }, []);
+
 
   const nextSlide = () => {
     if (index < hotels.length - 1) {
@@ -90,8 +91,9 @@ const ResortCarousel = () => {
       >
         <div
           className="image-container-12"
-          style={{ transform: `translateX(-${index * 320}px)` }}
+          style={{ transform: `translateX(-${index * (280 + 26)}px)` }}
         >
+
           {hotels.map((hotel, i) => (
             <div className="image-box-12" key={hotel.id}>
               <img src={hotel.images[0]} alt={hotel.name} />

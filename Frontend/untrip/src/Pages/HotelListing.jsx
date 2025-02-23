@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { MapPin, Star, Wifi, Car, Coffee, Utensils } from 'lucide-react';
-import '../css/Hotel-Listing.css'
+import { 
+    MapPin, Star, Wifi, Car, Coffee, Utensils, 
+    Phone, Mail, Globe, Camera, Check, X,
+    Sun, Moon, Bed, Bath, Users, Key
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import '../css/Hotel-Listing.css';
 
 const HotelListing = () => {
     const { id } = useParams();
@@ -9,6 +14,10 @@ const HotelListing = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('overview');
+    const [selectedDates, setSelectedDates] = useState({ checkIn: null, checkOut: null });
+    const [guestCount, setGuestCount] = useState(1);
+    const [showGallery, setShowGallery] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('https://untrip-1.onrender.com/api/hotels/raw')
@@ -20,6 +29,47 @@ const HotelListing = () => {
                 const hotel = data.find(hotel => hotel._id === id || hotel.hotel_id.toString() === id);
                 if (hotel) {
                     setHotelData(hotel);
+                    // Simulate loading additional hotel details
+                    setTimeout(() => {
+                        setHotelData(prev => ({
+                            ...prev,
+                            additionalAmenities: [
+                                { icon: 'spa', name: 'Spa Services', description: 'Full-service spa available' },
+                                { icon: 'gym', name: 'Fitness Center', description: '24/7 access' },
+                                { icon: 'pool', name: 'Swimming Pool', description: 'Outdoor heated pool' }
+                            ],
+                            roomTypes: [
+                                {
+                                    name: 'Deluxe Room',
+                                    price: 200,
+                                    amenities: ['King Bed', 'City View', 'Mini Bar'],
+                                    maxOccupancy: 2,
+                                    size: '35m²'
+                                },
+                                {
+                                    name: 'Executive Suite',
+                                    price: 350,
+                                    amenities: ['Living Room', 'Ocean View', 'Kitchenette'],
+                                    maxOccupancy: 3,
+                                    size: '55m²'
+                                },
+                                {
+                                    name: 'Presidential Suite',
+                                    price: 500,
+                                    amenities: ['Multiple Rooms', 'Panoramic View', 'Private Butler'],
+                                    maxOccupancy: 4,
+                                    size: '85m²'
+                                }
+                            ],
+                            policies: {
+                                checkIn: { from: '15:00', to: '23:00' },
+                                checkOut: { until: '11:00' },
+                                cancellation: '24 hours before check-in',
+                                children: 'Welcome - special amenities available',
+                                pets: 'Pet-friendly with additional fee'
+                            }
+                        }));
+                    }, 1000);
                 } else {
                     setError("Hotel not found with ID: " + id);
                 }
@@ -32,55 +82,140 @@ const HotelListing = () => {
             });
     }, [id]);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
+    const handleReserveNow = () => {
+        if (!selectedDates.checkIn || !selectedDates.checkOut) {
+            alert('Please select check-in and check-out dates');
+            return;
+        }
+        navigate('/secure', { 
+            state: { 
+                price, 
+                currency,
+                dates: selectedDates,
+                guests: guestCount,
+                roomType: activeRoom
+            } 
+        });
+    };
+
+    const [activeRoom, setActiveRoom] = useState(null);
+    const [showAllAmenities, setShowAllAmenities] = useState(false);
+
+    if (loading) return (
+        <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading hotel information...</p>
+        </div>
+    );
+    
+    if (error) return (
+        <div className="error-container">
+            <X className="error-icon" />
+            <h2>Error Loading Hotel</h2>
+            <p>{error}</p>
+            <button onClick={() => window.location.reload()}>Try Again</button>
+        </div>
+    );
 
     const { property } = hotelData;
-    const { 
-        name, 
-        reviewScore, 
-        reviewScoreWord, 
-        photoUrls, 
-        accessibilityLabel, 
-        reviewCount, 
-        propertyClass, 
-        priceBreakdown 
+    const {
+        name,
+        reviewScore,
+        reviewScoreWord,
+        photoUrls,
+        accessibilityLabel,
+        reviewCount,
+        propertyClass,
+        priceBreakdown
     } = property;
 
     const price = priceBreakdown?.grossPrice?.value || 'N/A';
     const currency = priceBreakdown?.grossPrice?.currency || 'USD';
 
     const renderTabContent = () => {
-        switch(activeTab) {
+        switch (activeTab) {
             case 'overview':
                 return (
                     <div className="hotel-main-content">
-                        <div className="hotel-vip-badge">VIP Access</div>
+                        <div className="hotel-header">
+                            <div className="hotel-vip-badge">VIP Access</div>
+                            <div className="hotel-quick-info">
+                                <Check className="check-icon" /> Best Price Guarantee
+                            </div>
+                        </div>
+                        
                         <h1 className="hotel-name-text">{name}</h1>
+                        
                         <div className="hotel-star-rating">
                             {[...Array(propertyClass || 5)].map((_, i) => (
                                 <Star key={i} className="hotel-star-icon" />
                             ))}
+                            <span className="hotel-class-label">{propertyClass}-Star Property</span>
                         </div>
+
+                        <div className="hotel-gallery-preview">
+                            <div className="main-image">
+                                <img src={photoUrls?.[0]} alt={name} />
+                            </div>
+                            <div className="thumbnail-grid">
+                                {photoUrls?.slice(1, 5).map((url, index) => (
+                                    <div key={index} className="thumbnail">
+                                        <img src={url} alt={`${name} - ${index + 2}`} />
+                                    </div>
+                                ))}
+                                <button 
+                                    className="view-all-photos"
+                                    onClick={() => setShowGallery(true)}
+                                >
+                                    <Camera /> View All Photos
+                                </button>
+                            </div>
+                        </div>
+
                         <div className="hotel-features">
                             <div className="hotel-feature-item">
+                                <Check className="feature-icon" />
                                 <span>Fully refundable</span>
                             </div>
                             <div className="hotel-feature-item">
+                                <Check className="feature-icon" />
                                 <span>Reserve now, pay later</span>
                             </div>
+                            <div className="hotel-feature-item">
+                                <Check className="feature-icon" />
+                                <span>Price Match Guarantee</span>
+                            </div>
                         </div>
+
                         <div className="hotel-rating-section">
                             <div className="hotel-rating">
                                 <span className="hotel-rating-score">{reviewScore}</span>
-                                <span className="hotel-rating-text">{reviewScoreWord}</span>
+                                <div className="rating-details">
+                                    <span className="hotel-rating-text">{reviewScoreWord}</span>
+                                    <span className="review-count">{reviewCount} verified reviews</span>
+                                </div>
                             </div>
-                            <a href="#" className="hotel-reviews-link">
-                                See all {reviewCount} reviews
-                            </a>
+                            <div className="rating-breakdown">
+                                <div className="rating-category">
+                                    <span>Cleanliness</span>
+                                    <div className="rating-bar" style={{width: '95%'}}></div>
+                                    <span>9.5</span>
+                                </div>
+                                <div className="rating-category">
+                                    <span>Service</span>
+                                    <div className="rating-bar" style={{width: '90%'}}></div>
+                                    <span>9.0</span>
+                                </div>
+                                <div className="rating-category">
+                                    <span>Location</span>
+                                    <div className="rating-bar" style={{width: '85%'}}></div>
+                                    <span>8.5</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 );
+
             case 'about':
                 return (
                     <div className="hotel-about-section">
@@ -88,104 +223,369 @@ const HotelListing = () => {
                         <p className="hotel-property-description">
                             {accessibilityLabel}
                         </p>
-                        <div className="hotel-amenities-grid">
-                            <div className="hotel-amenity-item">
-                                <Wifi className="hotel-amenity-icon" />
-                                <span>Free WiFi</span>
+
+                        <div className="hotel-highlights">
+                            <h3>Property Highlights</h3>
+                            <div className="highlights-grid">
+                                <div className="highlight-item">
+                                    <Sun className="highlight-icon" />
+                                    <h4>Perfect for longer stays</h4>
+                                    <p>Self-service laundry, fully-equipped kitchen, and free WiFi</p>
+                                </div>
+                                <div className="highlight-item">
+                                    <Users className="highlight-icon" />
+                                    <h4>Family friendly</h4>
+                                    <p>Kids stay free, children's pool, and family rooms available</p>
+                                </div>
                             </div>
-                            <div className="hotel-amenity-item">
-                                <Car className="hotel-amenity-icon" />
-                                <span>Free Parking</span>
+                        </div>
+
+                        <div className="hotel-amenities-section">
+                            <h3>Popular Amenities</h3>
+                            <div className="hotel-amenities-grid">
+                                <div className="hotel-amenity-item">
+                                    <Wifi className="hotel-amenity-icon" />
+                                    <div className="amenity-details">
+                                        <span>Free WiFi</span>
+                                        <small>Available throughout the property</small>
+                                    </div>
+                                </div>
+                                <div className="hotel-amenity-item">
+                                    <Car className="hotel-amenity-icon" />
+                                    <div className="amenity-details">
+                                        <span>Free Parking</span>
+                                        <small>On-site secure parking</small>
+                                    </div>
+                                </div>
+                                <div className="hotel-amenity-item">
+                                    <Coffee className="hotel-amenity-icon" />
+                                    <div className="amenity-details">
+                                        <span>Coffee Shop</span>
+                                        <small>24/7 coffee and snacks</small>
+                                    </div>
+                                </div>
+                                <div className="hotel-amenity-item">
+                                    <Utensils className="hotel-amenity-icon" />
+                                    <div className="amenity-details">
+                                        <span>Restaurant</span>
+                                        <small>International cuisine</small>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="hotel-amenity-item">
-                                <Coffee className="hotel-amenity-icon" />
-                                <span>Coffee Shop</span>
-                            </div>
-                            <div className="hotel-amenity-item">
-                                <Utensils className="hotel-amenity-icon" />
-                                <span>Restaurant</span>
+                            
+                            {!showAllAmenities ? (
+                                <button 
+                                    className="show-more-amenities"
+                                    onClick={() => setShowAllAmenities(true)}
+                                >
+                                    Show all amenities
+                                </button>
+                            ) : (
+                                <div className="all-amenities-grid">
+                                    {/* Additional amenities would be listed here */}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="hotel-contact-section">
+                            <h3>Contact Information</h3>
+                            <div className="contact-grid">
+                                <div className="contact-item">
+                                    <Phone className="contact-icon" />
+                                    <span>+1 (555) 123-4567</span>
+                                </div>
+                                <div className="contact-item">
+                                    <Mail className="contact-icon" />
+                                    <span>contact@hotel.com</span>
+                                </div>
+                                <div className="contact-item">
+                                    <Globe className="contact-icon" />
+                                    <span>www.hotel.com</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 );
+
             case 'rooms':
                 return (
                     <div className="hotel-rooms-section">
                         <h2 className="hotel-section-title">Available Rooms</h2>
+                        
+                        <div className="room-filters">
+                            <div className="date-picker">
+                                <input 
+                                    type="date" 
+                                    value={selectedDates.checkIn || ''} 
+                                    onChange={(e) => setSelectedDates(prev => ({
+                                        ...prev,
+                                        checkIn: e.target.value
+                                    }))}
+                                    min={new Date().toISOString().split('T')[0]}
+                                />
+                                <span>to</span>
+                                <input 
+                                    type="date"
+                                    value={selectedDates.checkOut || ''}
+                                    onChange={(e) => setSelectedDates(prev => ({
+                                        ...prev,
+                                        checkOut: e.target.value
+                                    }))}
+                                    min={selectedDates.checkIn || new Date().toISOString().split('T')[0]}
+                                />
+                            </div>
+                            
+                            <div className="guest-counter">
+                                <button 
+                                    onClick={() => setGuestCount(prev => Math.max(1, prev - 1))}
+                                    disabled={guestCount <= 1}
+                                >-</button>
+                                <span>{guestCount} {guestCount === 1 ? 'Guest' : 'Guests'}</span>
+                                <button 
+                                    onClick={() => setGuestCount(prev => Math.min(4, prev + 1))}
+                                    disabled={guestCount >= 4}
+                                >+</button>
+                            </div>
+                        </div>
+
                         <div className="hotel-rooms-grid">
-                            {['Deluxe Room', 'Superior Room', 'Executive Suite'].map((room, index) => (
-                                <div key={index} className="hotel-room-item">
-                                    <h3 className="hotel-room-name">{room}</h3>
-                                    <div className="hotel-room-amenities">
-                                        <Wifi className="hotel-amenity-icon" />
-                                        <Car className="hotel-amenity-icon" />
-                                        <Coffee className="hotel-amenity-icon" />
+                            {hotelData.roomTypes.map((room, index) => (
+                                <div 
+                                    key={index} 
+                                    className={`hotel-room-item ${activeRoom === room.name ? 'active' : ''}`}
+                                    onClick={() => setActiveRoom(room.name)}
+                                >
+                                    <div className="room-header">
+                                        <h3 className="hotel-room-name">{room.name}</h3>
+                                        <span className="room-size">{room.size}</span>
                                     </div>
-                                    <div className="hotel-room-price">
-                                        <span className="hotel-price-amount">${100 + (index * 50)}</span>
-                                        <button className="hotel-book-button">Book Now</button>
+
+                                    <div className="room-details">
+                                        <div className="room-amenities">
+                                            <div className="amenity">
+                                                <Users className="amenity-icon" />
+                                                <span>Up to {room.maxOccupancy} guests</span>
+                                            </div>
+                                            <div className="amenity">
+                                                <Bed className="amenity-icon" />
+                                                <span>{room.amenities[0]}</span>
+                                            </div>
+                                            <div className="amenity">
+                                                <Bath className="amenity-icon" />
+                                                <span>Private Bathroom</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="room-features">
+                                            {room.amenities.map((amenity, i) => (
+                                                <span key={i} className="feature-tag">{amenity}</span>
+                                            ))}
+                                        </div>
+
+                                        <div className="room-price-section">
+                                            <div className="price-details">
+                                                <span className="room-price">${room.price}</span>
+                                                <span className="price-period">per night</span>
+                                            </div>
+                                            <button 
+                                                className="select-room-button"
+                                                onClick={() => {
+                                                    setActiveRoom(room.name);
+                                                    handleReserveNow();
+                                                }}
+                                            >
+                                                Select Room
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
+
+                        <div className="room-policies">
+                            <h3>Room Policies</h3>
+                            <div className="policy-grid">
+                                <div className="policy-item">
+                                    <Key className="policy-icon" />
+                                    <div className="policy-content">
+                                        <h4>Check-in/Check-out</h4>
+                                        <p>Check-in from {hotelData.policies.checkIn.from}</p>
+                                        <p>Check-out until {hotelData.policies.checkOut.until}</p>
+                                    </div>
+                                </div>
+                                <div className="policy-item">
+                                    <Users className="policy-icon" />
+                                    <div className="policy-content">
+                                        <h4>Children</h4>
+                                        <p>{hotelData.policies.children}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 );
+
             case 'accessibility':
                 return (
                     <div className="hotel-accessibility-section">
                         <h2 className="hotel-section-title">Accessibility Features</h2>
+                        
+                        <div className="accessibility-overview">
+                            <p>We are committed to providing accessible accommodations and services to all our guests. Our property features various accessibility options to ensure a comfortable stay for everyone.</p>
+                        </div>
+
                         <div className="hotel-accessibility-grid">
                             <div className="hotel-accessibility-item">
-                                <h3 className="hotel-subsection-title">In the hotel</h3>
+                                <h3 className="hotel-subsection-title">Property Accessibility</h3>
                                 <ul className="hotel-feature-list">
-                                    <li>Wheelchair-accessible parking</li>
-                                    <li>Elevator</li>
-                                    <li>Accessible bathroom</li>
-                                    <li>Roll-in shower</li>
-                                    <li>Braille signage</li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Wheelchair-accessible parking</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Elevator</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Accessible bathroom</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Roll-in shower</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Braille signage</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Visual alarms in hallways</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Accessible reception desk</span>
+                                    </li>
                                 </ul>
                             </div>
+
                             <div className="hotel-accessibility-item">
-                                <h3 className="hotel-subsection-title">In the room</h3>
+                                <h3 className="hotel-subsection-title">Room Accessibility</h3>
                                 <ul className="hotel-feature-list">
-                                    <li>Wheelchair-accessible doors</li>
-                                    <li>Grab bars in bathroom</li>
-                                    <li>Visual fire alarm</li>
-                                    <li>Lowered electrical outlets</li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Wheelchair-accessible doors</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Grab bars in bathroom</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Visual fire alarm</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Lowered electrical outlets</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Height-adjusted amenities</span>
+                                    </li>
+                                    <li>
+                                        <Check className="feature-icon" />
+                                        <span>Emergency cord in bathroom</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
+
+                        <div className="accessibility-contact">
+                            <h3>Need Additional Assistance?</h3>
+                            <p>Please contact our accessibility coordinator at least 24 hours before arrival to ensure we can best accommodate your needs.</p>
+                            <button className="contact-button">
+                                <Phone className="button-icon" />
+                                Contact Accessibility Coordinator
+                            </button>
+                        </div>
                     </div>
                 );
+
             case 'policies':
                 return (
                     <div className="hotel-policies-section">
                         <h2 className="hotel-section-title">Hotel Policies</h2>
-                        <div className="hotel-policies-grid">
-                            <div className="hotel-policy-item">
-                                <h3 className="hotel-subsection-title">Check-in/Check-out</h3>
-                                <div className="hotel-policy-details">
-                                    <div>
-                                        <p className="hotel-policy-label">Check-in time</p>
-                                        <p className="hotel-policy-value">2:00 PM - 11:00 PM</p>
+
+                        <div className="policies-grid">
+                            <div className="policy-card">
+                                <h3>Check-in/Check-out</h3>
+                                <div className="time-details">
+                                    <div className="time-item">
+                                        <Sun className="time-icon" />
+                                        <div>
+                                            <h4>Check-in</h4>
+                                            <p>{hotelData.policies.checkIn.from} - {hotelData.policies.checkIn.to}</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p className="hotel-policy-label">Check-out time</p>
-                                        <p className="hotel-policy-value">11:00 AM</p>
+                                    <div className="time-item">
+                                        <Moon className="time-icon" />
+                                        <div>
+                                            <h4>Check-out</h4>
+                                            <p>Until {hotelData.policies.checkOut.until}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="hotel-policy-item">
-                                <h3 className="hotel-subsection-title">Important Information</h3>
-                                <ul className="hotel-feature-list">
-                                    <li>Government-issued photo ID required</li>
-                                    <li>Credit card required for incidental charges</li>
-                                    <li>Minimum check-in age is 18</li>
+
+                            <div className="policy-card">
+                                <h3>Cancellation Policy</h3>
+                                <p>Free cancellation up to {hotelData.policies.cancellation}</p>
+                                <ul className="policy-details">
+                                    <li>Full refund if cancelled within the specified time</li>
+                                    <li>Changes to booking also available</li>
+                                    <li>Contact hotel directly for late cancellations</li>
                                 </ul>
                             </div>
+
+                            <div className="policy-card">
+                                <h3>Payment Options</h3>
+                                <ul className="payment-methods">
+                                    <li>Major credit cards accepted</li>
+                                    <li>Digital payment methods available</li>
+                                    <li>Cash accepted</li>
+                                </ul>
+                            </div>
+
+                            <div className="policy-card">
+                                <h3>House Rules</h3>
+                                <div className="rules-grid">
+                                    <div className="rule-item">
+                                        <Users className="rule-icon" />
+                                        <span>Age restriction: 18+</span>
+                                    </div>
+                                    <div className="rule-item">
+                                        <Check className="rule-icon" />
+                                        <span>{hotelData.policies.pets}</span>
+                                    </div>
+                                    <div className="rule-item">
+                                        <Coffee className="rule-icon" />
+                                        <span>Breakfast available</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="additional-info">
+                            <h3>Additional Information</h3>
+                            <ul>
+                                <li>Government-issued photo ID required at check-in</li>
+                                <li>Credit card required for incidental charges</li>
+                                <li>Special requests cannot be guaranteed</li>
+                            </ul>
                         </div>
                     </div>
                 );
+
             default:
                 return null;
         }
@@ -198,9 +598,7 @@ const HotelListing = () => {
                     <button
                         key={tab}
                         onClick={() => setActiveTab(tab)}
-                        className={`hotel-tab-item ${
-                            activeTab === tab ? 'hotel-tab-active' : ''
-                        }`}
+                        className={`hotel-tab-item ${activeTab === tab ? 'hotel-tab-active' : ''}`}
                     >
                         {tab.charAt(0).toUpperCase() + tab.slice(1)}
                     </button>
@@ -212,53 +610,105 @@ const HotelListing = () => {
 
                 <div className="hotel-map-section">
                     <div className="hotel-price-section">
-                        <h2 className="hotel-price-title">Price</h2>
+                        <h2 className="hotel-price-title">Price Details</h2>
                         <div className="hotel-price-amount">
                             {currency} {price}
+                            <span className="per-night">per night</span>
                         </div>
-                        <p className="hotel-price-description">Includes taxes and charges</p>
-                        <button className="hotel-book-button">Reserve Now</button>
+                        <div className="price-breakdown">
+                            <div className="breakdown-item">
+                                <span>Room rate</span>
+                                <span>{currency} {Math.round(price * 0.8)}</span>
+                            </div>
+                            <div className="breakdown-item">
+                                <span>Taxes and fees</span>
+                                <span>{currency} {Math.round(price * 0.2)}</span>
+                            </div>
+                        </div>
+                        <p className="hotel-price-description">Includes all taxes and charges</p>
+                        <button 
+                            className="hotel-book-button" 
+                            onClick={handleReserveNow}
+                            disabled={!selectedDates.checkIn || !selectedDates.checkOut}
+                        >
+                            Reserve Now
+                        </button>
+                        <p className="booking-note">Free cancellation available</p>
                     </div>
 
-                    <h2 className="hotel-section-title">Explore the area</h2>
-                    <div className="hotel-map-container">
-                        <img
-                            src={photoUrls?.[0] || "https://images.unsplash.com/photo-1566073771259-6a8506099945"}
-                            alt="Hotel"
-                            className="hotel-map-image"
-                        />
-                    </div>
-                    <div className="hotel-location-info">
-                        <p>{name}</p>
-                        <a href="#" className="hotel-view-map-link">View in a map</a>
-                    </div>
+                    <div className="location-section">
+                        <h2 className="hotel-section-title">Location</h2>
+                        <div className="hotel-map-container">
+                            <img
+                                src={photoUrls?.[0] || "https://images.unsplash.com/photo-1566073771259-6a8506099945"}
+                                alt="Hotel"
+                                className="hotel-map-image"
+                            />
+                            <button className="view-map-button">
+                                <MapPin className="map-icon" />
+                                View Full Map
+                            </button>
+                        </div>
+                        
+                        <div className="hotel-location-info">
+                            <h3>{name}</h3>
+                            <p className="location-address">123 Hotel Street, City, Country</p>
+                        </div>
 
-                    <div className="hotel-nearby-places">
-                        <div className="hotel-place-item">
-                            <div className="hotel-place-info">
-                                <MapPin className="hotel-place-icon" />
-                                <span>MIDC Industrial Estate</span>
+                        <div className="hotel-nearby-places">
+                            <h3>Points of Interest</h3>
+                            <div className="place-item">
+                                <div className="place-info">
+                                    <MapPin className="place-icon" />
+                                    <div>
+                                        <span>MIDC Industrial Estate</span>
+                                        <p className="place-description">Business hub with multiple offices</p>
+                                    </div>
+                                </div>
+                                <span className="drive-time">3 min drive</span>
                             </div>
-                            <span className="hotel-drive-time">3 min drive</span>
-                        </div>
-                        <div className="hotel-place-item">
-                            <div className="hotel-place-info">
-                                <MapPin className="hotel-place-icon" />
-                                <span>NMIMS Mumbai</span>
+                            <div className="place-item">
+                                <div className="place-info">
+                                    <MapPin className="place-icon" />
+                                    <div>
+                                        <span>NMIMS Mumbai</span>
+                                        <p className="place-description">Premier educational institution</p>
+                                    </div>
+                                </div>
+                                <span className="drive-time">4 min drive</span>
                             </div>
-                            <span className="hotel-drive-time">4 min drive</span>
-                        </div>
-                        <div className="hotel-place-item">
-                            <div className="hotel-place-info">
-                                <MapPin className="hotel-place-icon" />
-                                <span>Mumbai Airport</span>
+                            <div className="place-item">
+                                <div className="place-info">
+                                    <MapPin className="place-icon" />
+                                    <div>
+                                        <span>Mumbai Airport</span>
+                                        <p className="place-description">International terminal</p>
+                                    </div>
+                                </div>
+                                <span className="drive-time">7 min drive</span>
                             </div>
-                            <span className="hotel-drive-time">7 min drive</span>
                         </div>
+                        <button className="see-more-button">
+                            See all nearby attractions
+                        </button>
                     </div>
-                    <a href="#" className="hotel-see-more-link">See all about this area</a>
                 </div>
             </div>
+
+            {showGallery && (
+                <div className="gallery-modal">
+                    <button className="close-gallery" onClick={() => setShowGallery(false)}>
+                        <X />
+                    </button>
+                    <div className="gallery-grid">
+                        {photoUrls?.map((url, index) => (
+                            <div key={index} className="gallery-item">
+                                <img src={url} alt={`${name} - ${index + 1}`} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
