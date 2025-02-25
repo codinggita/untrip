@@ -199,3 +199,136 @@
     transform: rotate(360deg);
   }
 }
+/* Add these styles to your existing signin.css file */
+
+.untrip-auth__back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 24px;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+
+.untrip-auth__back-button:hover {
+  color: #333;
+}
+
+.untrip-auth__success-message {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  color: #155724;
+  margin-bottom: 16px;
+  padding: 12px;
+  text-align: center;
+}
+
+/* Style for OTP input */
+input[type="text"]#otp {
+  letter-spacing: 2px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.untrip-auth__spinner {
+  animation: spin 1s linear infinite;
+}
+/* Add these new styles to your existing signin.css file */
+
+/* Header with icon */
+.untrip-auth__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.untrip-auth__step-icon {
+  color: #3b82f6;
+}
+
+/* Progress steps */
+.untrip-auth__steps {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.untrip-auth__step {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.untrip-auth__step--active {
+  background-color: #3b82f6;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* OTP input specific styles */
+.untrip-auth__input--otp {
+  letter-spacing: 8px;
+  font-size: 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Error state for input wrapper */
+.untrip-auth__input-wrapper--error {
+  border-color: #dc2626;
+  background-color: #fef2f2;
+}
+
+/* Animation for success message */
+.untrip-auth__success-message {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Hover effects */
+.untrip-auth__back-button:hover {
+  color: #3b82f6;
+  transform: translateX(-2px);
+}
+
+.untrip-auth__input-wrapper:hover:not(.untrip-auth__input-wrapper--error) {
+  border-color: #93c5fd;
+}
+
+/* Focus styles */
+.untrip-auth__input:focus {
+  outline: none;
+}
+
+.untrip-auth__input-wrapper:focus-within:not(.untrip-auth__input-wrapper--error) {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
