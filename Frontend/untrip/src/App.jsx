@@ -10,7 +10,7 @@ import Secure from './components/SecureBooking';
 import Page from './Pages/Page';
 import HotelListing from './Pages/HotelListing';
 import SignIn from './Userauth/Signin';
-import ForgetPassword from './Userauth/ForgetPassword';
+import ForgotPassword from './Userauth/ForgetPassword';
 import PageFor from './Pages/PageSearch';
 
 function App() {
@@ -29,7 +29,7 @@ function MainContent() {
       {!isAuthPage && <Header />}
       <Routes>
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/forgot-password" element={<ForgetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/" element={
           <>
             <Search /> 

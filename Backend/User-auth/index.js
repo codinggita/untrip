@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");
 const User = require("./models/user"); // Import User model
 
 const app = express();
@@ -31,6 +32,13 @@ app.get("/", async (req, res) => {
 // Import and use the auth routes
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
+
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, "client/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build", "index.html"));
+});
 
 // Start the server
 app.listen(PORT, () => {
