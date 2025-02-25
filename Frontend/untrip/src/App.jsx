@@ -5,11 +5,12 @@ import Sale from './components/sale';
 import Hotel from './components/HotelList';
 import Destination from './components/Destination';
 import Resort from './components/resort';
-import Footer from './components/Footer'; 
+import Footer from './components/Footer';
 import Secure from './components/SecureBooking';  
 import Page from './Pages/Page';
 import HotelListing from './Pages/HotelListing';
 import SignIn from './Userauth/Signin';
+import ForgetPassword from './Userauth/ForgetPassword';
 import PageFor from './Pages/PageSearch';
 
 function App() {
@@ -22,12 +23,13 @@ function App() {
 
 function MainContent() {
   const location = useLocation();
-  const isSignInPage = location.pathname === "/signin"; 
+  const isAuthPage = location.pathname === "/signin" || location.pathname === "/forgot-password"; 
   return (
     <>
-      {!isSignInPage && <Header />}
+      {!isAuthPage && <Header />}
       <Routes>
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/forgot-password" element={<ForgetPassword />} />
         <Route path="/" element={
           <>
             <Search /> 
@@ -45,7 +47,7 @@ function MainContent() {
         <Route path="/HotelDetails/:id" element={<HotelListing />} />
         <Route path="/secure" element={<Secure />} />
       </Routes>
-      {!isSignInPage && <Footer />}
+      {!isAuthPage && <Footer />}
     </>
   );
 }
