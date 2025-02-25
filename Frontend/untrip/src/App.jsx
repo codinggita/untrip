@@ -10,7 +10,7 @@ import Secure from './components/SecureBooking';
 import Page from './Pages/Page';
 import HotelListing from './Pages/HotelListing';
 import SignIn from './Userauth/Signin';
-import ForgotPassword from './Userauth/ForgotPassword';
+import ForgotPassword from './Userauth/ForgetPassword';
 import PageFor from './Pages/PageSearch';
 
 function App() {
