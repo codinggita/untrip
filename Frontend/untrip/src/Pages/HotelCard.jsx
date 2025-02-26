@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import "../css/Hotel-Card.css"; 
 
+
+const CONVERSION_RATE = 87.22; 
+const DISCOUNT_FACTOR = 0.1;
 const HotelDetail = () => {
     const { id } = useParams();
     const [hotels, setHotels] = useState([]);
@@ -105,6 +108,9 @@ const HotelCard = ({
 }) => {
   const navigate = useNavigate();  
 
+  const priceInINR = price * CONVERSION_RATE * DISCOUNT_FACTOR;
+  const totalPriceInINR = priceInINR + 250; 
+
   return (
       <div className="hotel-card-container">
           <div className="hotel-card-image-wrapper">
@@ -131,14 +137,14 @@ const HotelCard = ({
                   
                   {/* Original Price with Strikethrough (Rounded to 2 Decimal Places) */}
                   <p className="hotel-card-original-price">
-                      <del>${(price + 50).toFixed(2)}</del>
+                      <del>₹{(price * CONVERSION_RATE).toFixed(2)}</del>
                   </p>
 
                   {/* Discounted Price (Rounded to 2 Decimal Places) */}
-                  <p className="hotel-card-price-amount">${price.toFixed(2)}</p>
+                  <p className="hotel-card-price-amount">₹{priceInINR.toFixed(2)}</p>
 
                   {/* Total Price (Rounded to 2 Decimal Places) */}
-                  <p className="hotel-card-total-price">${totalPrice.toFixed(2)} total</p>
+                  <p className="hotel-card-total-price">₹{totalPriceInINR.toFixed(2)} total</p>
 
                   <p className="hotel-card-tax-info">Includes taxes & fees</p>
 

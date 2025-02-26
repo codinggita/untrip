@@ -14,7 +14,7 @@ const HotelList = () => {
     const fetchHotels = async () => {
       try {
         const city = location.state?.city; // Get the city from navigation state
-        console.log("City Received:", city); // ✅ Debugging Log
+        console.log("City Received:", city); 
 
         if (!city) {
           throw new Error("No city provided");
@@ -86,6 +86,23 @@ const HotelCard = ({
 }) => {
   const navigate = useNavigate();
 
+  
+  const usdToInrRate = 87.22;
+  const discountPercentage = 90;
+
+  
+  const convertAndDiscount = (usdPrice) => {
+    if (usdPrice === 'N/A') return 'N/A';
+    const inrPrice = usdPrice * usdToInrRate;
+    const discountedPrice = inrPrice * (1 - discountPercentage / 100);
+    return Math.round(discountedPrice);
+  };
+
+  
+  const originalPriceInINR = price * usdToInrRate;
+  const discountedPriceInINR = convertAndDiscount(price);
+  const totalPriceInINR = convertAndDiscount(totalPrice);
+  
   return (
     <div className="hotel-card-container">
       <div className="hotel-card-image-wrapper">
@@ -116,16 +133,17 @@ const HotelCard = ({
         <div className="hotel-card-price-section">
           <p className="hotel-card-price-label">from</p>
 
-          {/* Original Price with Strikethrough (Rounded to 2 Decimal Places) */}
+          
           <p className="hotel-card-original-price">
-            <del>${(price + 50).toFixed(2)}</del>
+            <del>₹{originalPriceInINR.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</del>
+            <span style={{ color: 'green', fontWeight: 'bold', marginLeft: '8px' }}>{discountPercentage}% OFF</span>
           </p>
 
-          {/* Discounted Price (Rounded to 2 Decimal Places) */}
-          <p className="hotel-card-price-amount">${price.toFixed(2)}</p>
+          
+          <p className="hotel-card-price-amount">₹{discountedPriceInINR.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</p>
 
-          {/* Total Price (Rounded to 2 Decimal Places) */}
-          <p className="hotel-card-total-price">${totalPrice.toFixed(2)} total</p>
+          
+          <p className="hotel-card-total-price">₹{totalPriceInINR.toLocaleString('en-IN', { maximumFractionDigits: 0 })} total</p>
 
           <p className="hotel-card-tax-info">Includes taxes & fees</p>
 

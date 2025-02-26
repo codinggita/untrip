@@ -8,6 +8,7 @@ const Hotel = () => {
   const [hotelData, setHotelData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const conversionRate = 87.22; 
 
   useEffect(() => {
     const fetchHotelData = async () => {
@@ -50,15 +51,19 @@ const Hotel = () => {
 
       <div className="hotel-container">
         {hotelData.slice(0, 4).map((hotel, index) => (
-          <HotelCard key={index} hotelInfo={hotel} />
+          <HotelCard key={index} hotelInfo={hotel} conversionRate={conversionRate} />
         ))}
       </div>
     </div>
   );
 };
 
-const HotelCard = ({ hotelInfo }) => {
+const HotelCard = ({ hotelInfo, conversionRate }) => {
   const navigate = useNavigate();
+
+  
+  const priceInINR = (hotelInfo.price.value * conversionRate) * 0.1; 
+  const totalPriceInINR = priceInINR * 3; 
 
   return (
     <div className="container-hotel" onClick={() => navigate(`/hotel/${hotelInfo.id}`)}>
@@ -69,11 +74,11 @@ const HotelCard = ({ hotelInfo }) => {
           <p className="rating">⭐ {hotelInfo.rating}</p>
           <h2>Very Good</h2>
           <p className="price">
-            {hotelInfo.price.currency} {hotelInfo.price.value.toFixed(2)}
+            ₹ {priceInINR.toFixed(2)}
           </p>
           <p>
             Per Night <br />
-            {hotelInfo.price.currency} {(hotelInfo.price.value * 3).toFixed(2)} Total <br />
+            ₹ {totalPriceInINR.toFixed(2)} Total <br />
             Includes Taxes & Fees
           </p>
         </div>

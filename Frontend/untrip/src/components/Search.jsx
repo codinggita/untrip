@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import { MapPin, Calendar, Clock, Plane, Ship, Package } from "lucide-react"
+import { MapPin, Calendar, Clock, Plane, Ship, Package, Loader } from "lucide-react"
 import "../css/Search.css"
 import { useNavigate } from "react-router-dom"
 
@@ -17,6 +17,7 @@ const SearchBox = () => {
   const [city, setCity] = useState("")
   const [pickupLocation, setPickupLocation] = useState("")
   const [dropoffLocation, setDropoffLocation] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const dateInputRef = useRef(null)
   const datePopupRef = useRef(null)
   const navigate = useNavigate()
@@ -51,9 +52,13 @@ const SearchBox = () => {
   }
 
   const handleSearch = async () => {
+    // Set loading state to true when search starts
+    setIsLoading(true)
+    
     if (activeTab === "Stays") {
       if (!city) {
         alert("Please enter a city.")
+        setIsLoading(false)
         return
       }
 
@@ -67,15 +72,18 @@ const SearchBox = () => {
       } catch (error) {
         console.error("Error fetching hotels:", error)
         alert("Failed to fetch hotels. Please try again.")
+        setIsLoading(false)
       }
     } else if (activeTab === "Cars") {
       if (!pickupLocation) {
         alert("Please enter a pick-up location.")
+        setIsLoading(false)
         return
       }
       
       if (!dates.pickup) {
         alert("Please select a pick-up date.")
+        setIsLoading(false)
         return
       }
 
@@ -107,7 +115,12 @@ const SearchBox = () => {
       } catch (error) {
         console.error("Error fetching cars:", error)
         alert("Failed to fetch cars. Please try again.")
+        setIsLoading(false)
       }
+    } else {
+      // For other tabs that don't have functionality yet
+      alert("This feature is coming soon.")
+      setIsLoading(false)
     }
   }
 
@@ -127,6 +140,16 @@ const SearchBox = () => {
       document.removeEventListener("click", handleClickOutside)
     }
   }, [])
+
+  // Navigation will not reset the loading state after component unmounts
+  // This ensures loading state is reset if navigation occurs
+  useEffect(() => {
+    return () => {
+      if (isLoading) {
+        setIsLoading(false)
+      }
+    }
+  }, [isLoading])
 
   const renderStaysSection = () => (
     <>
@@ -358,8 +381,15 @@ const SearchBox = () => {
         {activeTab === "Things to do" && renderThingsToDoSection()}
         {activeTab === "Cruises" && renderCruisesSection()}
 
-        <button className="search-button" onClick={handleSearch}>
-          Search
+        <button className="search-button" onClick={handleSearch} disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader className="spinnerr" size={16} />
+              <span>Searching...</span>
+            </>
+          ) : (
+            "Search"
+          )}
         </button>
       </div>
 
