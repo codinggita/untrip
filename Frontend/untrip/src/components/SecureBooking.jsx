@@ -11,10 +11,10 @@ import { CreditCard, Mail, Shield, User } from "lucide-react"
 export default function SecureBooking() {
   const [selectedInsurance, setSelectedInsurance] = useState("")
   const location = useLocation()
-  const { price = 199, currency = "USD" } = location.state || {}
+  const { price = 14925, currency = "INR" } = location.state || {} 
   const basePrice = Number(price)
-  const taxesAndFees = 35.8
-  const insuranceCost = selectedInsurance === "recommended" ? 24.99 : 0
+  const taxesAndFees = 2685 
+  const insuranceCost = selectedInsurance === "recommended" ? 1874.25 : 0 
   const totalPrice = (basePrice + taxesAndFees + insuranceCost).toFixed(2)
 
   return (
@@ -64,7 +64,7 @@ export default function SecureBooking() {
                 value="recommended"
                 title="Recommended: Trip Insurance"
                 description="Protect your trip against unexpected cancellations, delays, and medical emergencies."
-                price="$24.99"
+                price="₹1,874.25"
               />
               <InsuranceOption value="no-insurance" title="No thanks, I'll risk my stay" />
             </RadioGroup>
@@ -132,11 +132,11 @@ function InsuranceOption({ value, title, description, price }) {
 function PriceSummary({ basePrice, currency, taxesAndFees, insuranceCost, totalPrice, selectedInsurance }) {
   return (
     <div className="space-y-2">
-      <PriceRow label="Room rate" value={`${currency} ${basePrice.toFixed(2)}`} />
-      <PriceRow label="Taxes and fees" value={`$${taxesAndFees.toFixed(2)}`} />
-      {selectedInsurance === "recommended" && <PriceRow label="Trip insurance" value="$24.99" />}
+      <PriceRow label="Room rate" value={`${currency === 'INR' ? '₹' : currency} ${basePrice.toLocaleString('en-IN')}`} />
+      <PriceRow label="Taxes and fees" value={`₹${taxesAndFees.toLocaleString('en-IN')}`} />
+      {selectedInsurance === "recommended" && <PriceRow label="Trip insurance" value="₹1,874.25" />}
       <Separator className="my-2" />
-      <PriceRow label="Total" value={`${currency} ${totalPrice}`} isTotal />
+      <PriceRow label="Total" value={`${currency === 'INR' ? '₹' : currency} ${Number(totalPrice).toLocaleString('en-IN')}`} isTotal />
     </div>
   )
 }

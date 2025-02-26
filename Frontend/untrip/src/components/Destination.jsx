@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight, HelpCircle, Info } from "lucide-react";
 import "../css/Destination.css";
 
 const BASE_API_URL = "https://untrip-1.onrender.com/api/search-hotels?destination=";
+const CONVERSION_RATE = 87.22; 
+const DISCOUNT_FACTOR = 0.1; 
 
 const DESTINATIONS = [
   "London", "Dubai", "Mumbai", "Paris", "Tokyo",
@@ -24,13 +26,16 @@ const DestinationExplorer = () => {
       const response = await fetch(`${BASE_API_URL}${destination}`);
       const data = await response.json();
 
-      const hotelList = data.map((hotel) => ({
-        id: hotel.id,
-        name: hotel.name,
-        region: hotel.city,
-        price: parseFloat(hotel.price.value).toFixed(2), // 🔹 Price rounded to 2 decimals
-        image: hotel.images?.[0] || "/placeholder.svg",
-      }));
+      const hotelList = data.map((hotel) => {
+        const priceInINR = parseFloat(hotel.price.value) * CONVERSION_RATE * DISCOUNT_FACTOR;
+        return {
+          id: hotel.id,
+          name: hotel.name,
+          region: hotel.city,
+          price: priceInINR.toFixed(2), 
+          image: hotel.images?.[0] || "/placeholder.svg",
+        };
+      });
 
       setHotels(hotelList);
     } catch (error) {
@@ -96,7 +101,7 @@ const DestinationExplorer = () => {
                   <h3 className="destination-name">{hotel.name}</h3>
                   <p className="destination-region">{hotel.region}</p>
                   <p className="destination-price">
-                    <span className="price-amount">${hotel.price}</span>
+                    <span className="price-amount">₹ {hotel.price}</span>
                     <span className="price-text">avg. nightly price</span>
                   </p>
                 </div>

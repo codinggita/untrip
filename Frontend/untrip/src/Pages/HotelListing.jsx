@@ -18,6 +18,20 @@ const HotelListing = () => {
     const [guestCount, setGuestCount] = useState(1);
     const [showGallery, setShowGallery] = useState(false);
     const navigate = useNavigate();
+    const [selectionError, setSelectionError] = useState(null);
+
+    
+    const usdToInrRate = 87.22;
+    
+    const discountPercentage = 90;
+
+    
+    const convertAndDiscount = (usdPrice) => {
+        if (usdPrice === 'N/A') return 'N/A';
+        const inrPrice = usdPrice * usdToInrRate;
+        const discountedPrice = inrPrice * (1 - discountPercentage / 100);
+        return Math.round(discountedPrice);
+    };
 
     useEffect(() => {
         fetch('https://untrip-1.onrender.com/api/hotels/raw')
@@ -83,10 +97,22 @@ const HotelListing = () => {
     }, [id]);
 
     const handleReserveNow = () => {
+        // Clear any previous error messages
+        setSelectionError(null);
+        
+        // Check if dates are selected
         if (!selectedDates.checkIn || !selectedDates.checkOut) {
-            alert('Please select check-in and check-out dates');
+            setSelectionError("Please select check-in and check-out dates before reserving.");
             return;
         }
+        
+        // Check if a room is selected
+        if (!activeRoom) {
+            setSelectionError("Please select a room before reserving.");
+            return;
+        }
+        
+        // If all validations pass, proceed with reservation
         navigate('/secure', { 
             state: { 
                 price, 
@@ -129,8 +155,9 @@ const HotelListing = () => {
         priceBreakdown
     } = property;
 
-    const price = priceBreakdown?.grossPrice?.value || 'N/A';
-    const currency = priceBreakdown?.grossPrice?.currency || 'USD';
+    const originalPrice = priceBreakdown?.grossPrice?.value || 'N/A';
+    const price = convertAndDiscount(originalPrice);
+    const currency = 'INR'; 
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -384,8 +411,10 @@ const HotelListing = () => {
 
                                         <div className="room-price-section">
                                             <div className="price-details">
-                                                <span className="room-price">${room.price}</span>
+                                                <span className="room-price">₹{convertAndDiscount(room.price)}</span>
                                                 <span className="price-period">per night</span>
+                                                <span className="original-price">₹{Math.round(room.price * usdToInrRate)}</span>
+                                                <span className="discount-badge">90% OFF</span>
                                             </div>
                                             <button 
                                                 className="select-room-button"
@@ -615,6 +644,10 @@ const HotelListing = () => {
                             {currency} {price}
                             <span className="per-night">per night</span>
                         </div>
+                        <div className="original-price-display">
+                            <span>Original Price: {currency} {Math.round(originalPrice * usdToInrRate)}</span>
+                            <span className="discount-label">90% OFF</span>
+                        </div>
                         <div className="price-breakdown">
                             <div className="breakdown-item">
                                 <span>Room rate</span>
@@ -626,10 +659,18 @@ const HotelListing = () => {
                             </div>
                         </div>
                         <p className="hotel-price-description">Includes all taxes and charges</p>
+                        
+                        {/* Display error message if there's a selection error */}
+                        {selectionError && (
+                            <div className="selection-error-message">
+                                <X className="error-icon" size={16} />
+                                {selectionError}
+                            </div>
+                        )}
+                        
                         <button 
                             className="hotel-book-button" 
                             onClick={handleReserveNow}
-                            disabled={!selectedDates.checkIn || !selectedDates.checkOut}
                         >
                             Reserve Now
                         </button>
