@@ -4,13 +4,15 @@
     padding: 50px 0;
     max-width: 1200px;
     margin: auto;
-    position: absolute;
-    top: 1730px;
-    left: 81px;
+    /* position: absolute; - removed */
+    /* top: 1730px; - removed */
+    /* left: 81px; - removed */
 }
+
 .text-for-resort-12{
     display: flex;
 }
+
 .text-for-resort-12 h1 {
     font-size: 32px;
     font-weight: bold;
@@ -20,43 +22,35 @@
 
 .carousel-12 {
     display: flex;
-    overflow-x: auto; 
-    scroll-snap-type: x mandatory; 
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     justify-content: flex-start; /* ✅ Fix */
     position: relative;
-    scrollbar-width: none; 
+    scrollbar-width: none;
     white-space: nowrap;
 }
-
-
-
-
+   
 .image-container-12 {
     display: flex;
     flex-wrap: nowrap;
     transition: transform 0.5s ease-in-out;
     gap: 26px;
-    min-width: 100%; 
+    min-width: 100%;
 }
-
-
-
-
+   
 .image-box-12 {
     position: relative;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
-
-
+ 
 .image-box-12 img {
-    width: 280px; 
+    width: 280px;
     height: 380px;
     border-radius: 15px;
-    object-fit: cover; 
+    object-fit: cover;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
-
-
+ 
 .image-text-12 {
     position: absolute;
     bottom: 10px;
@@ -85,9 +79,7 @@
     transition: 0.3s;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
-
-
-
+  
 .prev-btn {
     left: -60px;
 }
@@ -95,6 +87,7 @@
 .next-btn {
     right: -60px;
 }
+
 /* Loader Container */
 .loader-container {
     display: flex;
@@ -102,25 +95,24 @@
     align-items: center;
     justify-content: center;
     height: 300px;
-  }
-  
-  /* Spinner Animation */
-  .spinner {
+}
+    
+/* Spinner Animation */
+.spinner {
     width: 50px;
     height: 50px;
     border: 5px solid rgba(0, 0, 0, 0.1);
     border-top-color: #007bff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-  }
-  
-  /* Spinner Animation Keyframes */
-  @keyframes spin {
+}
+    
+/* Spinner Animation Keyframes */
+@keyframes spin {
     0% {
       transform: rotate(0deg);
     }
     100% {
       transform: rotate(360deg);
     }
-  }
-  
+}
