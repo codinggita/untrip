@@ -1,89 +1,152 @@
+/* sale.css - Improved version */
+
+/* Container styling */
 .img-bex {
     position: relative;
-    width: 100%;
-    height: 400px; /* Set the height of the container */
-    padding: 0 2%; /* Adds space on both sides of the image */
-    top: 425px;
-}
-
-.img-bes {
+    width: 98%;
+    height: 500px;
+    margin: 40px 0;
+    overflow: hidden;
+    margin-left: 13px;
+  }
+  
+  /* Banner image container */
+  .img-bes {
     position: relative;
     width: 100%;
     height: 100%;
-}
-
-.img-bes img {
-    width: 1296px;
-    height: 554px;
-    object-fit: cover; /* Makes the image cover the entire container */
+  }
+  
+  /* Banner image styling */
+  .img-bes img {
+    width: 100%; /* Use percentage for better responsiveness */
+    height: 100%;
+    object-fit: cover;
     position: absolute;
     top: 0;
     left: 0;
-    border-radius: 17px;
-}
-
-.box-text {
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  /* Text box styling */
+  .box-text {
     position: absolute;
     top: 50%;
-    left: 2%; /* Align the box to the left with some space */
-    transform: translateY(-50%); /* Center the box vertically */
-    background-color: rgb(255 255 255 / 100%); /* Semi-transparent black background */
-    color: rgb(0, 0, 0);
-    padding: 20px;
+    left: 5%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent */
+    color: #333; /* Darker than black for better readability */
+    padding: 30px;
     text-align: left;
-    border-radius: 8px;
-    width: 45%; /* Control the width of the box */
-    max-width: 400px; /* Limit the maximum width */
-    border-radius: 13px;
-}
-
-.box-text h1 {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.box-text h5 {
+    border-radius: 12px;
+    width: 40%;
+    max-width: 380px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .box-text:hover {
+    transform: translateY(-52%); /* Slight lift on hover */
+  }
+  
+  /* Typography */
+  .box-text h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.2;
+    color: #222;
+  }
+  
+  .box-text h5 {
     font-size: 16px;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.box-text button {
+    margin-bottom: 24px;
+    line-height: 1.6;
+    color: #555;
+    font-weight: 400;
+  }
+  
+  /* Button styling */
+  .box-text button {
     background-color: #f5a623;
     color: white;
-    padding: 15px 30px;
+    padding: 14px 28px;
     border: none;
     font-size: 16px;
-    font-weight: bold;
-    border-radius: 4px;
+    font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-
-
-/* Responsive Styling */
-@media (max-width: 768px) {
-    .img-bex {
-        padding: 0 5%; /* Smaller padding for mobile */
-    }
-
+    transition: all 0.25s ease-in-out;
+    display: inline-block;
+    letter-spacing: 0.5px;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(245, 166, 35, 0.3);
+  }
+  
+  .box-text button:hover {
+    background-color: #e69816;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(245, 166, 35, 0.4);
+  }
+  
+  .box-text button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(245, 166, 35, 0.3);
+  }
+  
+  /* Responsive breakpoints */
+  @media (max-width: 992px) {
     .box-text {
-        width: 80%;
-        padding: 15px;
+      width: 50%;
+      left: 4%;
+      padding: 25px;
     }
-
+  }
+  
+  @media (max-width: 768px) {
+    .img-bex {
+      height: 350px;
+    }
+    
+    .box-text {
+      width: 60%;
+      padding: 20px;
+    }
+    
     .box-text h1 {
-        font-size: 24px;
+      font-size: 24px;
+      margin-bottom: 12px;
     }
-
+    
     .box-text h5 {
-        font-size: 14px;
+      font-size: 14px;
+      margin-bottom: 20px;
     }
-
+    
     .box-text button {
-        padding: 12px 25px;
-        font-size: 14px;
+      padding: 12px 24px;
+      font-size: 14px;
     }
-}
+  }
+  
+  @media (max-width: 576px) {
+    .img-bex {
+      height: 300px;
+    }
+    
+    .box-text {
+      width: 80%;
+      padding: 15px;
+      left: 3%;
+    }
+    
+    .box-text h1 {
+      font-size: 20px;
+    }
+    
+    .box-text button {
+      padding: 10px 20px;
+      width: 100%;
+    }
+  }
