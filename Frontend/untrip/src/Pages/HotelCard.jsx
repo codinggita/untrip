@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";  
 import { Heart } from "lucide-react";
 import "../css/Hotel-Card.css"; 
+import Loader from '../components/Loader'
 
 
 const CONVERSION_RATE = 87.22; 
@@ -54,7 +55,13 @@ const HotelDetail = () => {
         fetchHotelDetails();
     }, [id]);  
 
-    if (loading) return <h2>Loading hotel details...</h2>;
+    if (loading) return <div style={{
+        position: 'relative', top: 0, left: 0, width: '100%', height: '100%',
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        background: 'rgba(255, 255, 255, 0.6)', zIndex: 9999
+      }}>
+        <Loader />
+      </div>;
     if (error) return <h2 style={{ color: "red" }}>{error}</h2>;
 
     return (
