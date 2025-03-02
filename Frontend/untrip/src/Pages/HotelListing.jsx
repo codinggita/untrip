@@ -19,13 +19,14 @@ const HotelListing = () => {
     const [showGallery, setShowGallery] = useState(false);
     const navigate = useNavigate();
     const [selectionError, setSelectionError] = useState(null);
-
+    const [activeRoom, setActiveRoom] = useState(null);
+    const [showAllAmenities, setShowAllAmenities] = useState(false);
     
     const usdToInrRate = 87.22;
     
     const discountPercentage = 90;
 
-    
+    // Convert USD to INR and apply discount
     const convertAndDiscount = (usdPrice) => {
         if (usdPrice === 'N/A') return 'N/A';
         const inrPrice = usdPrice * usdToInrRate;
@@ -42,7 +43,20 @@ const HotelListing = () => {
             .then(data => {
                 const hotel = data.find(hotel => hotel._id === id || hotel.hotel_id.toString() === id);
                 if (hotel) {
-                    setHotelData(hotel);
+                    // Initialize with empty arrays/objects to prevent rendering errors
+                    setHotelData({
+                        ...hotel,
+                        roomTypes: [],
+                        additionalAmenities: [],
+                        policies: {
+                            checkIn: { from: '', to: '' },
+                            checkOut: { until: '' },
+                            cancellation: '',
+                            children: '',
+                            pets: ''
+                        }
+                    });
+                    
                     // Simulate loading additional hotel details
                     setTimeout(() => {
                         setHotelData(prev => ({
@@ -115,17 +129,15 @@ const HotelListing = () => {
         // If all validations pass, proceed with reservation
         navigate('/secure', { 
             state: { 
-                price, 
-                currency,
+                price: hotelData?.property?.priceBreakdown?.grossPrice?.value ? 
+                    convertAndDiscount(hotelData.property.priceBreakdown.grossPrice.value) : 'N/A', 
+                currency: 'INR',
                 dates: selectedDates,
                 guests: guestCount,
                 roomType: activeRoom
             } 
         });
     };
-
-    const [activeRoom, setActiveRoom] = useState(null);
-    const [showAllAmenities, setShowAllAmenities] = useState(false);
 
     if (loading) return (
         <div className="loading-container">
@@ -142,6 +154,16 @@ const HotelListing = () => {
             <button onClick={() => window.location.reload()}>Try Again</button>
         </div>
     );
+
+    // Check if all required data is loaded
+    if (!hotelData || !hotelData.property) {
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p>Loading hotel details...</p>
+            </div>
+        );
+    }
 
     const { property } = hotelData;
     const {
@@ -335,6 +357,16 @@ const HotelListing = () => {
                 );
 
             case 'rooms':
+                // Check if roomTypes array exists and has data
+                if (!hotelData.roomTypes || hotelData.roomTypes.length === 0) {
+                    return (
+                        <div className="loading-room-data">
+                            <div className="loading-spinner"></div>
+                            <p>Loading room information...</p>
+                        </div>
+                    );
+                }
+
                 return (
                     <div className="hotel-rooms-section">
                         <h2 className="hotel-section-title">Available Rooms</h2>
@@ -431,26 +463,29 @@ const HotelListing = () => {
                             ))}
                         </div>
 
-                        <div className="room-policies">
-                            <h3>Room Policies</h3>
-                            <div className="policy-grid">
-                                <div className="policy-item">
-                                    <Key className="policy-icon" />
-                                    <div className="policy-content">
-                                        <h4>Check-in/Check-out</h4>
-                                        <p>Check-in from {hotelData.policies.checkIn.from}</p>
-                                        <p>Check-out until {hotelData.policies.checkOut.until}</p>
+                        {/* Check if policies exist before accessing them */}
+                        {hotelData.policies && (
+                            <div className="room-policies">
+                                <h3>Room Policies</h3>
+                                <div className="policy-grid">
+                                    <div className="policy-item">
+                                        <Key className="policy-icon" />
+                                        <div className="policy-content">
+                                            <h4>Check-in/Check-out</h4>
+                                            <p>Check-in from {hotelData.policies.checkIn.from}</p>
+                                            <p>Check-out until {hotelData.policies.checkOut.until}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="policy-item">
-                                    <Users className="policy-icon" />
-                                    <div className="policy-content">
-                                        <h4>Children</h4>
-                                        <p>{hotelData.policies.children}</p>
+                                    <div className="policy-item">
+                                        <Users className="policy-icon" />
+                                        <div className="policy-content">
+                                            <h4>Children</h4>
+                                            <p>{hotelData.policies.children}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 );
 
@@ -541,6 +576,16 @@ const HotelListing = () => {
                 );
 
             case 'policies':
+                // Check if policies exist before rendering the content
+                if (!hotelData.policies) {
+                    return (
+                        <div className="loading-policies-data">
+                            <div className="loading-spinner"></div>
+                            <p>Loading policy information...</p>
+                        </div>
+                    );
+                }
+
                 return (
                     <div className="hotel-policies-section">
                         <h2 className="hotel-section-title">Hotel Policies</h2>
@@ -707,6 +752,16 @@ const HotelListing = () => {
                                     </div>
                                 </div>
                                 <span className="drive-time">3 min drive</span>
+                            </div>
+                            <div className="place-item">
+                                <div className="place-info">
+                                    <MapPin className="place-icon" />
+                                    <div>
+                                        <span>NMIMS Mumbai</span>
+                                        <p className="place-description">Premier educational institution</p>
+                                    </div>
+                                </div>
+                                <span className="drive-time">4 min drive</span>
                             </div>
                             <div className="place-item">
                                 <div className="place-info">
