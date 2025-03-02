@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, HelpCircle, Info } from "lucide-react";
 import "../css/Destination.css";
+import Loader from "./Loader";
 
 const BASE_API_URL = "https://untrip-1.onrender.com/api/search-hotels?destination=";
 const CONVERSION_RATE = 87.22; 
@@ -82,7 +83,13 @@ const DestinationExplorer = () => {
 
         <div className="slider-wrapper" ref={sliderRef}>
           {loading ? (
-            <div className="loader"></div> // 🔹 Loading Animation
+            <div style={{
+              position: 'relative', width: '100%', height: '100%',
+              display: 'flex', justifyContent: 'center', alignItems: 'center',
+              background: 'rgba(255, 255, 255, 0.6)', zIndex: 9999
+            }}>
+              <Loader />
+            </div>  
           ) : hotels.length > 0 ? (
             hotels.map((hotel) => (
               <div 
