@@ -5,8 +5,12 @@ import Sale from './components/sale';
 import Hotel from './components/HotelList';
 import Destination from './components/Destination';
 import Resort from './components/resort';
+import CarRental from './components/Car-Rental';
 import Footer from './components/Footer';
-import Secure from './components/SecureBooking';  
+import Secure from './components/SecureBooking';
+import Car from './components/CarSearchPage';
+import SearchCar from './components/CarSearch';
+import NotFound from './components/Error';  
 import Page from './Pages/Page';
 import HotelListing from './Pages/HotelListing';
 import SignIn from './Userauth/Signin';
@@ -39,13 +43,14 @@ function MainContent() {
             <Destination />
           </>
         } />
-        <Route path="/hotels" element={
-        <>
-        <PageFor />
-        </>} />
+        <Route path="/hotels" element={<PageFor />} />
         <Route path="/hotel/:id" element={<Page />} />
         <Route path="/HotelDetails/:id" element={<HotelListing />} />
         <Route path="/secure" element={<Secure />} />
+        <Route path="/cars" element={<SearchCar />} />
+        <Route path="/car-rental/:carId" element={<CarRental />} />
+        <Route path="/SearchCar" element={<SearchCar />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {!isAuthPage && <Footer />}
     </>
