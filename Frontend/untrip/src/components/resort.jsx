@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../css/resort.css";
+import Loader from './Loader'
 
 const ResortCarousel = () => {
   const [hotels, setHotels] = useState([]); // Store hotel data
@@ -62,14 +63,13 @@ const ResortCarousel = () => {
     setIsDragging(false);
   };
 
-  if (loading) {
-    return (
-      <div className="loader-container">
-        <div className="spinner"></div>
-        <h2>Loading hotels...</h2>
-      </div>
-    );
-  }
+  if (loading) return <div style={{
+    position: 'relative', top: 0, left: 0, width: '100%', height: '100%',
+    display: 'flex', justifyContent: 'center', alignItems: 'center',
+    background: 'rgba(255, 255, 255, 0.6)', zIndex: 9999
+  }}>
+    <Loader />
+  </div>;
 
   if (error) {
     return <h2 style={{ color: "red" }}>{error}</h2>;
