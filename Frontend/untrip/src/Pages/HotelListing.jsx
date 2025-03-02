@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Hotel-Listing.css';
+import Loader from '../components/Loader';
 
 const HotelListing = () => {
     const { id } = useParams();
@@ -139,12 +140,13 @@ const HotelListing = () => {
         });
     };
 
-    if (loading) return (
-        <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Loading hotel information...</p>
-        </div>
-    );
+    if (loading) return <div style={{
+        position: 'relative', top: 0, left: 0, width: '100%', height: '100%',
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        background: 'rgba(255, 255, 255, 0.6)', zIndex: 9999
+      }}>
+        <Loader />
+      </div>;
     
     if (error) return (
         <div className="error-container">
